@@ -24,11 +24,36 @@ def msg(roomID,env_type='开机请求',speed='',temp=''):
     if env_type =='开机请求':
         if tem.runState=='close':
             TempControl.runTest(dp,tem,'open')
-            return '请求成功'
-        else:
-            return '已经开机，请勿重复请求'
+            tem.runState = 'run'
+            tem.tempSet = 25
+            tem.speedSet = 'mid'
+            dp.requestWind(tem.roomID, 2)
+
     elif env_type =='送风请求':
-        TempControl.runTest(dp,tem,(str(temp)+','+str(speed)))
+        if temp!='':
+            tem.tempSet = (int(msg[0]))
+            
+        if speed == 'high':
+            tem.speedSet = 'high'
+            dp.requestWind(tem.roomID, 3)
+
+        elif speed == 'mid':
+            tem.speedSet = 'mid'
+            dp.requestWind(tem.roomID, 2)
+
+        elif speed == 'low':
+            tem.speedSet = 'low'
+            dp.requestWind(tem.roomID, 1)
 
     elif env_type =='关机请求':
         TempControl.runTest(dp,tem,'close')
+        tem.runState = 'close'
+        dp.stopWind(tem.roomID)
+
+    dic = {'temp':round(tem.tempNow, 4),
+           'tempSet':tem.tempSet,
+           'speed': tem.speedSet,
+           'runState': tem.runState,
+           'totalCost': round(tem.totalCost, 4)}
+    print(dic)
+    return dic
