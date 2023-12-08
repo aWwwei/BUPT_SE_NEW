@@ -5,7 +5,7 @@ import json
 
 class Database:
     def __init__(self):
-        with open("database_config.json") as fp:
+        with open("config/database_config.json") as fp:
             database_settings = json.load(fp)
 
         self.host = database_settings["host"]

@@ -6,7 +6,7 @@ class Config:
     @staticmethod
     def getDispatch():
         cf = configparser.ConfigParser()
-        cf.read("paramConfig.ini", encoding="utf-8")
+        cf.read("config/paramConfig.ini", encoding="utf-8")
         dispatch = cf.items("DISPATCH")
         dispatch = dict(dispatch)
         return dispatch
@@ -14,7 +14,7 @@ class Config:
     @staticmethod
     def getTempcontrol():
         cf = configparser.ConfigParser()
-        cf.read("paramConfig.ini", encoding="utf-8")
+        cf.read("config/paramConfig.ini", encoding="utf-8")
         tempcontrol = cf.items("TEMPCONTROL")
         tempcontrol = dict(tempcontrol)
         return tempcontrol
@@ -22,7 +22,7 @@ class Config:
     @staticmethod
     def getBegintemp():
         cf = configparser.ConfigParser()
-        cf.read("paramConfig.ini", encoding="utf-8")
+        cf.read("config/paramConfig.ini", encoding="utf-8")
         beginTemp = cf.items("BEGINTEMP")
         beginTemp = dict(beginTemp)
         return beginTemp
@@ -30,7 +30,7 @@ class Config:
     @staticmethod
     def getTest():
         cf = configparser.ConfigParser()
-        cf.read("paramConfig.ini", encoding="utf-8")
+        cf.read("config/paramConfig.ini", encoding="utf-8")
         test = cf.items("TEST")
         test = dict(test)
         return test

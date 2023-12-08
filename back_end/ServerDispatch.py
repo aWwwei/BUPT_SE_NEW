@@ -7,6 +7,7 @@
 @ 修改日期：2023年12月6日
 '''
 from database import DetailsTable
+from front_desk import create_details_table
 import time
 #from PyQt5.QtCore import pyqtSignal
 #from PyQt5.QtCore import QObject

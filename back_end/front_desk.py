@@ -1,4 +1,4 @@
-from models import CheckTable, DetailsTable
+from database import CheckTable, DetailsTable
 import time
 import pandas as pd
 
@@ -71,7 +71,7 @@ def print_details(details_table, room_id):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.request_time = event_time[i]
             details_list.wind_speed = wind_speed[i]
@@ -81,14 +81,14 @@ def print_details(details_table, room_id):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
                 details_list.service_start_time = event_time[i]
             elif details_list.check_room_state(event_time[i], room_state[i]):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.wind_speed = wind_speed[i]
             details_list.room_state = room_state[i]
@@ -98,7 +98,7 @@ def print_details(details_table, room_id):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.request_time = None
             details_list.service_start_time = None
