@@ -1,11 +1,11 @@
-from database import CheckTable, DetailsTable
+from database import database, CheckTable, DetailsTable
 import time
 import pandas as pd
 
 
-def create_check_table():
+def create_check_table(db):
     # 打开数据库
-    check_table = CheckTable()
+    check_table = CheckTable(db)
     check_table.drop_table()
     check_table.create_table()
     return check_table
@@ -25,9 +25,9 @@ def print_bill(check_table, room_id):
 
 
 # 创建详单表
-def create_details_table():
+def create_details_table(db):
     # 打开数据库
-    details_table = DetailsTable()
+    details_table = DetailsTable(db)
     details_table.drop_table()
     details_table.create_table()
     return details_table
@@ -110,13 +110,15 @@ def print_details(details_table, room_id):
 
 
 if __name__ == '__main__':
-    # check_table = create_check_table()
+    database = database()
+
+    # check_table = create_check_table(database)
     # # 登记房间入住时间
     # check_table.check_in(1)
     # # 打印账单
     # print_bill(check_table, 1)
 
-    details_table = create_details_table()
+    details_table = create_details_table(database)
 
     details_table.insert(1, '开机', 'mid', 'waiting', 0)
     time.sleep(1)
@@ -124,3 +126,5 @@ if __name__ == '__main__':
     time.sleep(1)
     details_table.insert(1, '关机', 'low', 'closed', 1)
     print_details(details_table, 1)
+
+    database.close()
