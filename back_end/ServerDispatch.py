@@ -7,6 +7,7 @@
 @ 修改日期：2023年12月6日
 '''
 from database import DetailsTable
+from datetime import datetime
 import time
 #from PyQt5.QtCore import pyqtSignal
 #from PyQt5.QtCore import QObject
@@ -14,34 +15,41 @@ import ReadConfig
 import front_desk
 import threading
 
+
 class Dispatch:
     #changeSignal = pyqtSignal()  # 用于发射信号
 
-    def __init__(self):
+    def __init__(self,database):
         super(Dispatch, self).__init__()
 
         self.queueS = []    # 服务队列
         self.queueW = []    # 等待队列
+        self.queueI = []    # 插入队列
         self.roomIDA = 0    # 全局变量roomIDA代表经调度要从服务队列移到等待队列，停止送风的房间号，可直接读取
         self.roomIDB = 0    # 全局变量roomIDB代表经调度要从等待队列移到服务队列，开始送风的房间号，可直接读取
         self.speedA = 0     # roomIDA对应的风速（事实上始终为0）
         self.speedB = 0     # roomIDB对应的风速
+        self.stop_flag = threading.Event()
 
         config = ReadConfig.Config.getDispatch()
         self.timeSpeed = int(config['speed'])                     # 读入仿真速度
         self.queueSLen = int(config['quelen'])                    # 读入队列长度
         self.waitTime = int(config['waittime'])/self.timeSpeed    # 读入最长等待时间
-        self.details_table = create_details_table()               # 创建详单表
+        self.check_table = front_desk.create_check_table(database)
+        self.details_table = front_desk.create_details_table(database)    # 创建详单表
         self.thread = threading.Thread(target=self.updateQueue)   # 创建线程
         self.thread.start()  # 启动线程
+        self.thread0 = threading.Thread(target=self.updateInsert)  # 创建线程
+        self.thread0.start()  # 启动线程
 
-
+   
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()
         dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':0
                
                }
+
         self.queueS.append(dic)
         return self.queueS
 
@@ -273,7 +281,7 @@ class Dispatch:
             # 若等待队列为空
             else:
                 return roomID, 0, 0, 0
-        # 若该房间号不在等待队列中
+        # 若该房间号在等待队列中
         elif flag0 == 1:
             self.removeFromWait(roomID)
             return roomID, 0, 0, 0
@@ -318,6 +326,25 @@ class Dispatch:
                         self.roomIDB = 0
                         self.speedA = 0
                         self.speedB = 0
+
+    def Insert(self,roomID,env_type,speed,runState,cost):
+        t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        #print(t)
+        item = [ roomID, t,env_type,speed,runState,cost]
+        self.queueI.append(item)
+
+    def updateInsert(self):
+        while not self.stop_flag.is_set():
+            time.sleep(1)
+            if len(self.queueI)!=0:
+                item = self.queueI.pop(0)
+                print(item)
+                self.details_table.insert(item[0], item[1],item[2], item[3], item[4], item[5])
+    
+    def stop_Insert(self):
+        self.stop_flag.set()  # 设置标志变量，使函数B的循环退出
+
+    
 
                 
 

@@ -76,17 +76,24 @@ class TempControl:#(QObject):
                     if item['roomID']==self.roomID:
                         wait=1
                 if run:
+                    if self.runState!='run':
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'run' , round(self.totalCost, 4))
                     self.runState='run'
                 elif wait:
+                    if self.runState=='run':
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting' , round(self.totalCost, 4))
                     self.runState='waiting'
 
                 if self.runState == 'run':
                     if self.runModel == "cool" and self.tempNow <= self.tempSet:  # 温度相等停止变化
-                        self.runState = 'sleeping'
+                        self.runState = 'sleeping' 
                         self.dp.stopWind(self.roomID)
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting' , round(self.totalCost, 4))
                     elif self.runModel == "warm" and self.tempNow >= self.tempSet:  # 温度相等停止变化
                         self.runState = 'sleeping'
                         self.dp.stopWind(self.roomID)
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting' , round(self.totalCost, 4))
+                                    
 
                     elif self.runModel == "cool" and self.tempNow > self.tempSet:  # 制冷模式下
                         if self.speedSet == 'high':
@@ -155,7 +162,7 @@ def runTest(dp, tem, msg):
     msg = msg.split(',')
     if len(msg) == 1:
         if msg[0] == 'open' :
-            tem.runState = 'run'
+            tem.runState = 'waiting'
             tem.tempSet = 25
             tem.speedSet = 'mid'
             dp.requestWind(tem.roomID, 2)

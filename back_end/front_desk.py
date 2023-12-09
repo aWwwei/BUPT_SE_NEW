@@ -1,11 +1,12 @@
-from models import CheckTable, DetailsTable
+from database import database, CheckTable, DetailsTable
 import time
 import pandas as pd
+import ServerDispatch
+from datetime import datetime
 
-
-def create_check_table():
+def create_check_table(db):
     # 打开数据库
-    check_table = CheckTable()
+    check_table = CheckTable(db)
     check_table.drop_table()
     check_table.create_table()
     return check_table
@@ -25,9 +26,9 @@ def print_bill(check_table, room_id):
 
 
 # 创建详单表
-def create_details_table():
+def create_details_table(db):
     # 打开数据库
-    details_table = DetailsTable()
+    details_table = DetailsTable(db)
     details_table.drop_table()
     details_table.create_table()
     return details_table
@@ -65,13 +66,12 @@ def print_details(details_table, room_id):
     df = pd.DataFrame(columns=['房间号', '请求时间', '服务开始时间', '服务结束时间', '服务时长', '风速', '当前费用', '费率'])
 
     for i in range(len(event_type)):
-
         if event_type[i] == '开机':
             if details_list.check_room_state(event_time[i], room_state[i]):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.request_time = event_time[i]
             details_list.wind_speed = wind_speed[i]
@@ -81,14 +81,14 @@ def print_details(details_table, room_id):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
                 details_list.service_start_time = event_time[i]
             elif details_list.check_room_state(event_time[i], room_state[i]):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.wind_speed = wind_speed[i]
             details_list.room_state = room_state[i]
@@ -98,8 +98,9 @@ def print_details(details_table, room_id):
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
-                                '服务时长': details_list.service_end_time - details_list.service_start_time,
+                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
+                print(details_list.service_end_time)
             details_list.request_time = None
             details_list.service_start_time = None
             details_list.service_end_time = None
@@ -110,17 +111,24 @@ def print_details(details_table, room_id):
 
 
 if __name__ == '__main__':
-    # check_table = create_check_table()
+    database = database()
+
+    # check_table = create_check_table(database)
     # # 登记房间入住时间
     # check_table.check_in(1)
     # # 打印账单
     # print_bill(check_table, 1)
+    dp = ServerDispatch.Dispatch(database)
 
-    details_table = create_details_table()
 
-    details_table.insert(1, '开机', 'mid', 'waiting', 0)
+    dp.Insert(1, '开机', 'mid', 'waiting', 0)
     time.sleep(1)
-    details_table.insert(1, '修改风速', 'high', 'running', 0)
+    dp.Insert(1, '修改风速', 'high', 'running', 0)
     time.sleep(1)
-    details_table.insert(1, '关机', 'low', 'closed', 1)
-    print_details(details_table, 1)
+    dp.Insert(1, '关机', 'low', 'closed', 1)
+    time.sleep(5)
+    t1=time.time()
+    print_details(dp.details_table, 1)
+    print(time.time()-t1)
+
+    database.close()
