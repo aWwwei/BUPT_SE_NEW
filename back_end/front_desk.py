@@ -4,6 +4,10 @@ import pandas as pd
 import ServerDispatch
 from datetime import datetime
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514
 def create_check_table(db):
     # 打开数据库
     check_table = CheckTable(db)
@@ -120,11 +124,16 @@ if __name__ == '__main__':
     # print_bill(check_table, 1)
     dp = ServerDispatch.Dispatch(database)
 
+<<<<<<< HEAD
+=======
+    details_table = create_details_table(database)
+>>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514
 
     dp.Insert(1, '开机', 'mid', 'waiting', 0)
     time.sleep(1)
     dp.Insert(1, '修改风速', 'high', 'running', 0)
     time.sleep(1)
+<<<<<<< HEAD
     dp.Insert(1, '关机', 'low', 'closed', 1)
     time.sleep(5)
     t1=time.time()
@@ -132,3 +141,9 @@ if __name__ == '__main__':
     print(time.time()-t1)
 
     database.close()
+=======
+    details_table.insert(1, '关机', 'low', 'closed', 1)
+    print_details(details_table, 1)
+
+    database.close()
+>>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514

@@ -260,4 +260,8 @@ class DetailsTable:
             print(e)
             self.db.rollback()
         finally:
+<<<<<<< HEAD
             self.cursor.close()
+=======
+            self.cursor.close()
+>>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514
