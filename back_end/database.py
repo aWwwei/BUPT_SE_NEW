@@ -215,14 +215,14 @@ class DetailsTable:
             self.cursor.close()
 
     # 插入详单数据
-    def insert(self, room_id, event_type, room_wind_speed, room_state, cost):
+    def insert(self, room_id, event_time, event_type, room_wind_speed, room_state, cost):
         # 建立连接
         self.cursor = self.db.cursor()
         # 插入表的sql
-        sql = 'insert into details (room_id, event_type, wind_speed, room_state, cost) values (%s,%s,%s,%s,%s);'
+        sql = 'insert into details (room_id, event_time, event_type, wind_speed, room_state, cost) values (%s,%s,%s,%s,%s,%s);'
 
         try:
-            self.cursor.execute(sql, [room_id, event_type, room_wind_speed, room_state, cost])
+            self.cursor.execute(sql, [room_id, event_time, event_type, room_wind_speed, room_state, cost])
             self.db.commit()
         except Exception as e:
             print(e)
