@@ -100,6 +100,7 @@ def print_details(details_table, room_id):
                                 '服务结束时间': details_list.service_end_time,
                                 '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
+            details_list.room_state = room_state[i]
 
     df.to_excel('details.xlsx', index=False)
 
