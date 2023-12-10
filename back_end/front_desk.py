@@ -4,10 +4,7 @@ import pandas as pd
 import ServerDispatch
 from datetime import datetime
 
-<<<<<<< HEAD
-=======
 
->>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514
 def create_check_table(db):
     # 打开数据库
     check_table = CheckTable(db)
@@ -70,18 +67,16 @@ def print_details(details_table, room_id):
     df = pd.DataFrame(columns=['房间号', '请求时间', '服务开始时间', '服务结束时间', '服务时长', '风速', '当前费用', '费率'])
 
     for i in range(len(event_type)):
+
         if event_type[i] == '开机':
-            if details_list.check_room_state(event_time[i], room_state[i]):
-                df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
-                                '服务开始时间': details_list.service_start_time,
-                                '服务结束时间': details_list.service_end_time,
-                                '服务时长': str(details_list.service_end_time - details_list.service_start_time),
-                                '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
+            if details_list.room_state != 'running' and room_state == 'running':
+                details_list.service_start_time = event_time
             details_list.request_time = event_time[i]
             details_list.wind_speed = wind_speed[i]
             details_list.room_state = room_state[i]
         elif event_type[i] == '修改风速':
             if details_list.room_state == 'running':
+                details_list.service_end_time = event_time[i]
                 df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
                                 '服务开始时间': details_list.service_start_time,
                                 '服务结束时间': details_list.service_end_time,
@@ -104,12 +99,6 @@ def print_details(details_table, room_id):
                                 '服务结束时间': details_list.service_end_time,
                                 '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
-                print(details_list.service_end_time)
-            details_list.request_time = None
-            details_list.service_start_time = None
-            details_list.service_end_time = None
-            details_list.wind_speed = None
-            details_list.room_state = None
 
     df.to_excel('details.xlsx', index=False)
 
@@ -124,16 +113,14 @@ if __name__ == '__main__':
     # print_bill(check_table, 1)
     dp = ServerDispatch.Dispatch(database)
 
-<<<<<<< HEAD
-=======
     details_table = create_details_table(database)
->>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514
 
     dp.Insert(1, '开机', 'mid', 'waiting', 0)
     time.sleep(1)
     dp.Insert(1, '修改风速', 'high', 'running', 0)
     time.sleep(1)
-<<<<<<< HEAD
+    dp.Insert(1, '修改风速', 'mid', 'running', 1)
+
     dp.Insert(1, '关机', 'low', 'closed', 1)
     time.sleep(5)
     t1=time.time()
@@ -141,9 +128,3 @@ if __name__ == '__main__':
     print(time.time()-t1)
 
     database.close()
-=======
-    details_table.insert(1, '关机', 'low', 'closed', 1)
-    print_details(details_table, 1)
-
-    database.close()
->>>>>>> dff0f1c4868cba7efb993640a8b9446b577d3514
