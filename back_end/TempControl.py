@@ -37,6 +37,7 @@ class TempControl:#(QObject):
         self.speedSet = 'mid'       # 默认风速 high mid low
         self.runModel = 'cool'      # 默认运行状态 cool warm
         self.runState = 'close'     # 用于指示是否运行 run close sleep waiting sleeping
+        self.cost= 0
         self.totalCost = 0          # 计费
         self.dp = dp
         #self.changeTemp()
