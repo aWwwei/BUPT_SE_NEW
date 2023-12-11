@@ -69,7 +69,7 @@ def print_details(details_table, room_id):
     for i in range(len(event_type)):
 
         if event_type[i] == '开机':
-            if details_list.room_state != 'running' and room_state == 'running':
+            if details_list.room_state != 'running' and room_state[i] == 'running':
                 details_list.service_start_time = event_time
             details_list.request_time = event_time[i]
             details_list.wind_speed = wind_speed[i]
