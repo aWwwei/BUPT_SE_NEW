@@ -40,6 +40,7 @@ def msg(dp,roomID,env_type='开机请求',temp='',speed=''):
                 tem.runState = 'waiting'
             tem.tempSet = 25
             tem.speedSet = 'mid'
+            tem.cost = tem.totalCost
             dp.Insert(roomID, '开机', 'mid', tem.runState, round(tem.totalCost, 4))
             dp.requestWind(tem.roomID, 2)
 
@@ -73,6 +74,7 @@ def msg(dp,roomID,env_type='开机请求',temp='',speed=''):
            'tempSet':tem.tempSet,
            'speed': tem.speedSet,
            'runState': tem.runState,
+           'Cost': round(tem.totalCost-tem.cost, 4),
            'totalCost': round(tem.totalCost, 4)}
     if roomID==2:
         print(env_type)
@@ -148,5 +150,6 @@ if __name__ == '__main__':
             print('等待队列：', strW)
             t += 10
             times += 1
+        
 
 
