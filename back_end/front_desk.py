@@ -14,7 +14,7 @@ def create_check_table(db):
 
 
 # 打印账单
-def print_bill(check_table, room_id):
+def print_bill(check_table, room_id, total_cost):
     check_in_time = check_table.fetch_one(room_id)[0]
 
     check_in_time = check_in_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -22,7 +22,7 @@ def print_bill(check_table, room_id):
     check_out_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print(check_out_time)
 
-    df = pd.DataFrame({'房间号': [room_id], '入住时间': [check_in_time], '离开时间': [check_out_time]})
+    df = pd.DataFrame({'房间号': [room_id], '入住时间': [check_in_time], '离开时间': [check_out_time], '总费用': [total_cost]})
     df.to_excel('bill.xlsx', index=False)
 
 
@@ -102,7 +102,7 @@ def print_details(details_table, room_id):
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.room_state = room_state[i]
 
-    df.to_excel('details.xlsx', index=False)
+    return df
 
 
 if __name__ == '__main__':
