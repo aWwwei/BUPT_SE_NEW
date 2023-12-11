@@ -29,6 +29,7 @@ class Dispatch:
         self.roomIDB = 0    # 全局变量roomIDB代表经调度要从等待队列移到服务队列，开始送风的房间号，可直接读取
         self.speedA = 0     # roomIDA对应的风速（事实上始终为0）
         self.speedB = 0     # roomIDB对应的风速
+        self.Price = 1
         self.stop_flag = threading.Event()
 
         config = ReadConfig.Config.getDispatch()
@@ -42,7 +43,9 @@ class Dispatch:
         self.thread0 = threading.Thread(target=self.updateInsert)  # 创建线程
         self.thread0.start()  # 启动线程
 
-   
+    def setPrice(self,price):
+        self.Price=price
+
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()
