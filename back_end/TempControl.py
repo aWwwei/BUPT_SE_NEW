@@ -106,12 +106,12 @@ class TempControl:#(QObject):
                         if self.runModel == "cool" and self.tempNow <= self.tempSet:  # 温度相等停止变化
                             self.runState = 'sleeping'
                             self.dp.stopWind(self.roomID)
-                            time.sleep(0.2)
+                            time.sleep(0.5)
                             self.dp.Insert(self.roomID, '关机', self.speedSet, 'waiting', round(self.totalCost, 4))
                         elif self.runModel == "warm" and self.tempNow >= self.tempSet:  # 温度相等停止变化
                             self.runState = 'sleeping'
                             self.dp.stopWind(self.roomID)
-                            time.sleep(0.2)
+                            time.sleep(0.5)
                             self.dp.Insert(self.roomID, '关机', self.speedSet, 'waiting', round(self.totalCost, 4))
 
                         elif self.runModel == "cool" and self.tempNow > self.tempSet:  # 制冷模式下
