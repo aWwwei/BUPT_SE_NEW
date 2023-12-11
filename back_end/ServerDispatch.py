@@ -123,7 +123,7 @@ class Dispatch:
                         roomIDO = item['roomID']
                         self.moveToWait(roomIDO)
                         self.addToServer(roomID, speedValue)
-                        #print(roomID,'加入服务 ',roomIDO,'退出等待')
+                        #roomID,'加入服务 ',roomIDO,'退出等待')
                         return roomIDO, 0, roomID, speedValue
             elif lowNum == 0 and midNum >= 1:
                 for item in self.queueS:
@@ -131,7 +131,7 @@ class Dispatch:
                         roomIDO = item['roomID']
                         self.moveToWait(roomIDO)
                         self.addToServer(roomID, speedValue)
-                        #print(roomID,'加入服务 ',roomIDO,'退出等待')
+                        #roomID,'加入服务 ',roomIDO,'退出等待')
                         return roomIDO, 0, roomID, speedValue
                 # 服务队列中房间风速都大于等于新请求
         else:
@@ -162,7 +162,7 @@ class Dispatch:
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
                         self.removeFromWait(roomIDO)
-                        #print(roomIDO,'加入服务 ',roomID,'退出等待')
+                        #roomIDO,'加入服务 ',roomID,'退出等待')
                         return roomID, 0, roomIDO, speedO
                         # 等待队列无高风速，至少有一个中风速
             elif highNum == 0 and midNum >= 1:
@@ -174,7 +174,7 @@ class Dispatch:
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
                         self.removeFromWait(roomIDO)
-                        #print(roomIDO,'加入服务 ',roomID,'退出等待')
+                        #roomIDO,'加入服务 ',roomID,'退出等待')
                         return roomID, 0, roomIDO, speedO
 
                     # 等待队列中的风速都小于等于新请求
@@ -314,7 +314,7 @@ class Dispatch:
                                 self.speedB = item['speed']
                                 self.moveToWait(self.queueS[i]['roomID'])
                                 self.moveToServer(item['roomID'])
-                                #print(item['roomID'],'加入服务 ',self.queueS[i]['roomID'],'退出等待')
+                                #item['roomID'],'加入服务 ',self.queueS[i]['roomID'],'退出等待')
                                 break                           
                         if j:
                             self.roomIDA = 0
@@ -329,8 +329,9 @@ class Dispatch:
 
     def Insert(self,roomID,env_type,speed,runState,cost):
         t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        #print(t)
+        #t)
         item = [ roomID, t,env_type,speed,runState,cost]
+
         self.queueI.append(item)
 
     def updateInsert(self):
@@ -338,13 +339,7 @@ class Dispatch:
             time.sleep(1)
             if len(self.queueI)!=0:
                 item = self.queueI.pop(0)
-                print(item)
                 self.details_table.insert(item[0], item[1],item[2], item[3], item[4], item[5])
     
     def stop_Insert(self):
         self.stop_flag.set()  # 设置标志变量，使函数B的循环退出
-
-    
-
-                
-
