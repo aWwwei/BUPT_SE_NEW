@@ -21,7 +21,7 @@ class Dispatch:
 
     def __init__(self,database):
         super(Dispatch, self).__init__()
-
+        self.open = 1       # 开关
         self.queueS = []    # 服务队列
         self.queueW = []    # 等待队列
         self.queueI = []    # 插入队列
@@ -29,9 +29,10 @@ class Dispatch:
         self.roomIDB = 0    # 全局变量roomIDB代表经调度要从等待队列移到服务队列，开始送风的房间号，可直接读取
         self.speedA = 0     # roomIDA对应的风速（事实上始终为0）
         self.speedB = 0     # roomIDB对应的风速
-        self.stop_flag = threading.Event()
-
+        self.Price = 1      # 费率设定
+        self.stop_flag = threading.Event()                        # 线程停止
         config = ReadConfig.Config.getDispatch()
+        self.flag = int(config['flag'])                           # 测试状态开关
         self.timeSpeed = int(config['speed'])                     # 读入仿真速度
         self.queueSLen = int(config['quelen'])                    # 读入队列长度
         self.waitTime = int(config['waittime'])/self.timeSpeed    # 读入最长等待时间
@@ -42,7 +43,9 @@ class Dispatch:
         self.thread0 = threading.Thread(target=self.updateInsert)  # 创建线程
         self.thread0.start()  # 启动线程
 
-   
+    def setPrice(self,price):
+        self.Price=price
+
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()

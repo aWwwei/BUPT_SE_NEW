@@ -27,7 +27,6 @@ class TempControl:#(QObject):
         self.highPrice = float(self.tempConfig['highprice'])    # 高风费率
         self.midPrice = float(self.tempConfig['midprice'])      # 中风费率
         self.lowPrice = float(self.tempConfig['lowprice'])      # 低风费率
-        self.Price=1                                            # 总控费率
         self.highDelta = float(self.tempConfig['highdelta'])    # 高风温度变化率
         self.midDelta = float(self.tempConfig['middelta'])      # 中风温度变化率
         self.lowDelta = float(self.tempConfig['lowdelta'])      # 低风温度变化率
@@ -43,9 +42,6 @@ class TempControl:#(QObject):
         #self.changeTemp()
         self.thread = threading.Thread(target=self.changeTemp)  # 创建线程
         self.thread.start()  # 启动线程
-
-    def setPrice(self,price):
-        self.Price=price
 
     def setDefault_Now(self):
         self.tempDefault = int(self.config['room' + str(self.roomID)])
@@ -110,52 +106,52 @@ class TempControl:#(QObject):
                         if self.runModel == "cool" and self.tempNow <= self.tempSet:  # 温度相等停止变化
                             self.runState = 'sleeping'
                             self.dp.stopWind(self.roomID)
-                            time.sleep(0.2)
+                            time.sleep(0.5)
                             self.dp.Insert(self.roomID, '关机', self.speedSet, 'waiting', round(self.totalCost, 4))
                         elif self.runModel == "warm" and self.tempNow >= self.tempSet:  # 温度相等停止变化
                             self.runState = 'sleeping'
                             self.dp.stopWind(self.roomID)
-                            time.sleep(0.2)
+                            time.sleep(0.5)
                             self.dp.Insert(self.roomID, '关机', self.speedSet, 'waiting', round(self.totalCost, 4))
 
                         elif self.runModel == "cool" and self.tempNow > self.tempSet:  # 制冷模式下
                             if self.speedSet == 'high':
                                 self.tempNow -= self.highDelta / self.refreshSeq
-                                self.totalCost += self.Price*self.highPrice / self.refreshSeq
+                                self.totalCost += self.dp.Price*self.highPrice / self.refreshSeq
                                 if self.tempNow < self.tempSet:
-                                    self.totalCost += (self.tempNow - self.tempSet) * self.Price * self.highPrice / self.highDelta
+                                    self.totalCost += (self.tempNow - self.tempSet) * self.dp.Price * self.highPrice / self.highDelta
                                     self.tempNow = self.tempSet
                             elif self.speedSet == 'mid':
                                 self.tempNow -= self.midDelta / self.refreshSeq
-                                self.totalCost += self.Price*self.midPrice / self.refreshSeq
+                                self.totalCost += self.dp.Price*self.midPrice / self.refreshSeq
                                 if self.tempNow < self.tempSet:
-                                    self.totalCost += (self.tempNow - self.tempSet) * self.Price * self.midPrice / self.midDelta
+                                    self.totalCost += (self.tempNow - self.tempSet) * self.dp.Price * self.midPrice / self.midDelta
                                     self.tempNow = self.tempSet
                             elif self.speedSet == 'low':
                                 self.tempNow -= self.lowDelta / self.refreshSeq
-                                self.totalCost += self.Price*self.lowPrice / self.refreshSeq
+                                self.totalCost += self.dp.Price*self.lowPrice / self.refreshSeq
                                 if self.tempNow < self.tempSet:
-                                    self.totalCost += (self.tempNow - self.tempSet) * self.Price * self.lowPrice / self.lowDelta
+                                    self.totalCost += (self.tempNow - self.tempSet) * self.dp.Price * self.lowPrice / self.lowDelta
                                     self.tempNow = self.tempSet
 
                         elif self.runModel == "warm" and self.tempNow < self.tempSet:  # 制热模式下
                             if self.speedSet == 'high':
                                 self.tempNow += self.highDelta / self.refreshSeq
-                                self.totalCost += self.Price*self.highPrice / self.refreshSeq
+                                self.totalCost += self.dp.Price*self.highPrice / self.refreshSeq
                                 if self.tempNow > self.tempSet:
-                                    self.totalCost -= (self.tempNow - self.tempSet) * self.Price * self.highPrice / self.highDelta
+                                    self.totalCost -= (self.tempNow - self.tempSet) * self.dp.Price * self.highPrice / self.highDelta
                                     self.tempNow = self.tempSet
                             elif self.speedSet == 'mid':
                                 self.tempNow += self.midDelta / self.refreshSeq
-                                self.totalCost += self.Price*self.midPrice / self.refreshSeq
+                                self.totalCost += self.dp.Price*self.midPrice / self.refreshSeq
                                 if self.tempNow > self.tempSet:
-                                    self.totalCost -= (self.tempNow - self.tempSet) * self.Price * self.midPrice / self.midDelta
+                                    self.totalCost -= (self.tempNow - self.tempSet) * self.dp.Price * self.midPrice / self.midDelta
                                     self.tempNow = self.tempSet
                             elif self.speedSet == 'low':
                                 self.tempNow += self.lowDelta / self.refreshSeq
-                                self.totalCost += self.Price*self.lowPrice / self.refreshSeq
+                                self.totalCost += self.dp.Price*self.lowPrice / self.refreshSeq
                                 if self.tempNow > self.tempSet:
-                                    self.totalCost -= (self.tempNow - self.tempSet) * self.Price * self.lowPrice / self.lowDelta
+                                    self.totalCost -= (self.tempNow - self.tempSet) * self.dp.Price * self.lowPrice / self.lowDelta
                                     self.tempNow = self.tempSet
 
                     elif self.runState == 'sleeping':
@@ -243,58 +239,3 @@ def runTest(dp, tem, msg):
                 dp.requestWind(tem.roomID, 1)
 
             tem.tempSet = (int(msg[0]))
-
-if __name__ == '__main__':
-    dp=ServerDispatch.Dispatch()
-    times=1
-    
-    msg = [['open','18,','','','',',high','','','','22,','','','','','close','','','','open','','','','','','close',''],
-                    ['','open','','19,','','','close','open','','','','22,','','','','','close','','','open','','','','','','close'],
-                    ['','','open','','','','','','','','','','','','24,low','','',',high','','','','','close','','',''],
-                    ['','','','open','','','','','','18,high','','','','','','','','','20,mid','','','','','','','close'],
-                    ['','open','','','22,','','',',high','','','','',',low','','','20,high','','','','','25,','','','close','','']
-                    ]
-    
-    tem = [TempControl(i+1,dp) for i in range(5)]  # 创建5个Temp
-    t = time.time()
-    for i in range(5):
-        if msg[i][times] !='':
-            runTest(dp,tem[i],msg[i][0])
-        ('时间',0, '房间',tem[i].roomID, '温度',round(tem[i].tempNow, 4),'目标',tem[i].tempSet, '风速',tem[i].speedSet,'费用',round(tem[i].totalCost, 4),'状态',tem[i].runState)
-    strS=''
-    strW=''
-    for item in dp.queueS:
-        strS+=str(item['roomID'])+' '
-    for item in dp.queueW:
-        strW+=str(item['roomID'])+' '
-    ('服务队列：',strS)
-    ('等待队列：',strW)
-    while 1:
-        while (time.time()- t)>=10:
-            t1=time.time()
-            for i in range(5):
-                if msg[i][times] !='':
-                    runTest(dp,tem[i],msg[i][times])
-            t2=time.time()
-            (t2-t1)
-            for i in range(5):
-                if msg[i][times] !='':
-                    ('——>',i+1,msg[i][times])
-            ('时间',times)
-            for i in range(5):
-                (tem[i].roomID, '温度',round(tem[i].tempNow, 4),'目标',tem[i].tempSet,'风速',tem[i].speedSet, '费用',round(tem[i].totalCost, 4))
-            t3=time.time()
-            (t3-t2)
-            strS=''
-            strW=''
-            for item in dp.queueS:
-                strS+=str(item['roomID'])+' '
-            for item in dp.queueW:
-                strW+=str(item['roomID'])+' '
-            ('服务队列：',strS)
-            ('等待队列：',strW)
-            t+=10
-            times+=1
-            if times>=26:
-                break
-    
