@@ -342,7 +342,10 @@ class Dispatch:
             time.sleep(1)
             if len(self.queueI)!=0:
                 item = self.queueI.pop(0)
-                self.details_table.insert(item[0], item[1],item[2], item[3], item[4], item[5])
+                if item[2]=='账单':
+                    self.check_table.check_in(item[0])
+                else:
+                    self.details_table.insert(item[0], item[1],item[2], item[3], item[4], item[5])
     
     def stop_Insert(self):
         self.stop_flag.set()  # 设置标志变量，使函数B的循环退出
