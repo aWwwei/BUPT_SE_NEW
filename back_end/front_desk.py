@@ -23,7 +23,8 @@ def print_bill(check_table, room_id, total_cost):
     print(check_out_time)
 
     df = pd.DataFrame({'房间号': [room_id], '入住时间': [check_in_time], '离开时间': [check_out_time], '总费用': [str(total_cost)]})
-    df.to_excel('bill.xlsx', index=False)
+    return df
+    #df.to_excel('bill.xlsx', index=False)
 
 
 # 创建详单表
