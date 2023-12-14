@@ -55,8 +55,11 @@ class Dispatch:
     def setModel(self,cool=1):
         if cool:
             self.Model = 'cool'
+            return 'cool'
         else:
             self.Model = 'warm'
+            return 'warm'
+
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()
