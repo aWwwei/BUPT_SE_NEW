@@ -14,16 +14,12 @@
 @ 修改日期：2020年12月11日
 '''
 
-#from PyQt5.QtCore import pyqtSignal
-#from PyQt5.QtCore import QObject
 import time
 import ReadConfig
 import threading
 import ServerDispatch
 
-class TempControl:#(QObject):
-    #changeSignal = pyqtSignal()  # 用于发射信号
-
+class TempControl:
     def __init__(self, roomID,dp):
         super(TempControl, self).__init__()
         self.roomID = roomID
@@ -46,7 +42,6 @@ class TempControl:#(QObject):
         self.cost= 0
         self.totalCost = 0          # 计费
         self.dp = dp
-        #self.changeTemp()
         self.thread = threading.Thread(target=self.changeTemp)  # 创建线程
         self.thread.start()  # 启动线程
 
@@ -192,57 +187,3 @@ class TempControl:#(QObject):
                             self.tempNow += 0.5 / self.refreshSeq
                         elif self.tempNow > self.tempDefault:
                             self.tempNow -= 0.5 / self.refreshSeq
-
-                # 精度处理
-
-                # 对于温度和金额的精度进行处理
-
-                # 发送更新信号
-                # self.changeSignal.emit()
-
-
-
-def runTest(dp, tem, msg):
-    msg = msg.split(',')
-    if len(msg) == 1:
-        if msg[0] == 'open' :
-            tem.runState = 'waiting'
-            tem.tempSet = 25
-            tem.speedSet = 'mid'
-            dp.requestWind(tem.roomID, 2)
-
-        elif msg[0] == 'close' :
-            tem.runState = 'close'
-            dp.stopWind(tem.roomID)
-
-    elif len(msg) == 2:
-        if msg[0] == '':
-            if msg[1] == 'high':
-                tem.speedSet = 'high'
-                dp.requestWind(tem.roomID, 3)
-
-            elif msg[1] == 'mid':
-                tem.speedSet = 'mid'
-                dp.requestWind(tem.roomID, 2)
-
-            elif msg[1] == 'low':
-                tem.speedSet = 'low'
-                dp.requestWind(tem.roomID, 1)
-
-               
-        elif msg[1] == '':
-            tem.tempSet = (int(msg[0]))
-        else:
-            if msg[1] == 'high':
-                tem.speedSet = 'high'
-                dp.requestWind(tem.roomID, 3)
-
-            elif msg[1] == 'mid':
-                tem.speedSet = 'mid'
-                dp.requestWind(tem.roomID, 2)
-
-            elif msg[1] == 'low':
-                tem.speedSet = 'low'
-                dp.requestWind(tem.roomID, 1)
-
-            tem.tempSet = (int(msg[0]))
