@@ -23,6 +23,7 @@ class TempControl:
     def __init__(self, roomID,dp):
         super(TempControl, self).__init__()
         self.roomID = roomID
+        self.dp = dp
         self.tempConfig = ReadConfig.Config.getTempcontrol()    # 读入控制模块参数
         self.beginConfig = ReadConfig.Config.getBegintemp()     # 读入初始温度
         self.timeSpeed = int(self.tempConfig['speed'])          # 设置仿真速度
@@ -41,7 +42,6 @@ class TempControl:
         self.runState = 'close'               # 用于指示是否运行 run close sleep waiting sleeping
         self.cost= 0
         self.totalCost = 0                    # 计费
-        self.dp = dp
         self.thread = threading.Thread(target=self.changeTemp)  # 创建线程
         self.thread.start()  # 启动线程
 
@@ -188,3 +188,105 @@ class TempControl:
                             self.tempNow += 0.5 / self.refreshSeq
                         elif self.tempNow > self.tempDefault:
                             self.tempNow -= 0.5 / self.refreshSeq
+
+
+
+def runTest(dp, tem, msg):
+    msg = msg.split(',')
+    if len(msg) == 1:
+        if msg[0] == 'open' :
+            tem.runState = 'waiting'
+            tem.tempSet = 25
+            tem.speedSet = 'mid'
+            dp.requestWind(tem.roomID, 2)
+
+        elif msg[0] == 'close' :
+            tem.runState = 'close'
+            dp.stopWind(tem.roomID)
+
+    elif len(msg) == 2:
+        if msg[0] == '':
+            if msg[1] == 'high':
+                tem.speedSet = 'high'
+                dp.requestWind(tem.roomID, 3)
+
+            elif msg[1] == 'mid':
+                tem.speedSet = 'mid'
+                dp.requestWind(tem.roomID, 2)
+
+            elif msg[1] == 'low':
+                tem.speedSet = 'low'
+                dp.requestWind(tem.roomID, 1)
+
+               
+        elif msg[1] == '':
+            tem.tempSet = (int(msg[0]))
+        else:
+            if msg[1] == 'high':
+                tem.speedSet = 'high'
+                dp.requestWind(tem.roomID, 3)
+
+            elif msg[1] == 'mid':
+                tem.speedSet = 'mid'
+                dp.requestWind(tem.roomID, 2)
+
+            elif msg[1] == 'low':
+                tem.speedSet = 'low'
+                dp.requestWind(tem.roomID, 1)
+
+            tem.tempSet = (int(msg[0]))
+
+if __name__ == '__main__':
+    dp=ServerDispatch.Dispatch()
+    times=1
+    
+    msg = [['open','18,','','','',',high','','','','22,','','','','','close','','','','open','','','','','','close',''],
+                    ['','open','','19,','','','close','open','','','','22,','','','','','close','','','open','','','','','','close'],
+                    ['','','open','','','','','','','','','','','','24,low','','',',high','','','','','close','','',''],
+                    ['','','','open','','','','','','18,high','','','','','','','','','20,mid','','','','','','','close'],
+                    ['','open','','','22,','','',',high','','','','',',low','','','20,high','','','','','25,','','','close','','']
+                    ]
+    
+    tem = [TempControl(i+1,dp) for i in range(5)]  # 创建5个Temp
+    t = time.time()
+    for i in range(5):
+        if msg[i][times] !='':
+            runTest(dp,tem[i],msg[i][0])
+        ('时间',0, '房间',tem[i].roomID, '温度',round(tem[i].tempNow, 4),'目标',tem[i].tempSet, '风速',tem[i].speedSet,'费用',round(tem[i].totalCost, 4),'状态',tem[i].runState)
+    strS=''
+    strW=''
+    for item in dp.queueS:
+        strS+=str(item['roomID'])+' '
+    for item in dp.queueW:
+        strW+=str(item['roomID'])+' '
+    ('服务队列：',strS)
+    ('等待队列：',strW)
+    while 1:
+        while (time.time()- t)>=10:
+            t1=time.time()
+            for i in range(5):
+                if msg[i][times] !='':
+                    runTest(dp,tem[i],msg[i][times])
+            t2=time.time()
+            (t2-t1)
+            for i in range(5):
+                if msg[i][times] !='':
+                    ('——>',i+1,msg[i][times])
+            ('时间',times)
+            for i in range(5):
+                (tem[i].roomID, '温度',round(tem[i].tempNow, 4),'目标',tem[i].tempSet,'风速',tem[i].speedSet, '费用',round(tem[i].totalCost, 4))
+            t3=time.time()
+            (t3-t2)
+            strS=''
+            strW=''
+            for item in dp.queueS:
+                strS+=str(item['roomID'])+' '
+            for item in dp.queueW:
+                strW+=str(item['roomID'])+' '
+            ('服务队列：',strS)
+            ('等待队列：',strW)
+            t+=10
+            times+=1
+            if times>=26:
+                break
+    
