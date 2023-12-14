@@ -15,16 +15,12 @@
 from database import DetailsTable
 from datetime import datetime
 import time
-#from PyQt5.QtCore import pyqtSignal
-#from PyQt5.QtCore import QObject
 import ReadConfig
 import front_desk
 import threading
 
 
 class Dispatch:
-    #changeSignal = pyqtSignal()  # 用于发射信号
-
     def __init__(self,database):
         super(Dispatch, self).__init__()
         self.open = 1       # 开关
