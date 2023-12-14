@@ -22,14 +22,14 @@ import TempControl
 import time
 import threading
 
-class Scheduler:
+class Server:
     def __init__(self):
-        super(Scheduler, self).__init__()
+        super(Server, self).__init__()
         self.switch = 0                                      # 开关
         self.Room = set()                                    # 房间集合
         self.database = front_desk.database()                # 获取数据库类
         self.dp = ServerDispatch.Dispatch(self.database)     # 获取调度类
-        self.temSet = []                                     # 房间温控集合
+        self.temSet = [None]*40                              # 房间温控集合
         self.temID = [0] * 40                                # 温控ID集合
         self.queueP = []                                     # print队列
         self.thread = threading.Thread(target=self.dfprint)  # 创建线程
@@ -52,7 +52,10 @@ class Scheduler:
         dic = []
         for i in range(5):
             tem = self.temSet[self.temID[i]]
-            dic.append({'当前温度': round(tem.tempNow, 4),
+            if tem is None:
+                dic.append(None)
+            else:
+                dic.append({'当前温度': round(tem.tempNow, 4),
                         '目标温度': tem.tempSet,
                         '风速': tem.speedSet,
                         '状态': tem.runState,
@@ -164,11 +167,13 @@ class Scheduler:
         return dic
 
     def try_test(self,roomID=1, type=1):
-        thread = threading.Thread(target=self.try_test, args=(roomID, type))  # 创建线程
+        thread = threading.Thread(target=self.try_Test, args=(roomID, type))  # 创建线程
         thread.start()  # 启动线程
+        print('线程建立')
 
     def try_Test(self,roomID, type):  # 运行测试用例，返回房间号对应的账单详单两个dataframe的列表
         if self.dp.flag:
+            print('开始运行')
             msg0 = [
                 [['开机请求'], ['送风请求', '18', ''], '', '', '', ['送风请求', '', 'high'], '', '', '',
                  ['送风请求', '22', ''],
@@ -251,5 +256,5 @@ class Scheduler:
                     times += 1
 
 if __name__ == '__main__':
-    sd = Scheduler()
+    sd = Server()
     sd.try_test()
