@@ -5,13 +5,13 @@
 @ 创建人：任波
 @ 修改描述：添加插入调用
 @ 修改人：任波
-@ 修改日期：2020年12月7日
+@ 修改日期：2023年12月7日
 @ 修改描述：修改状态判断
 @ 修改人：任波
-@ 修改日期：2020年12月10日
+@ 修改日期：2023年12月10日
 @ 修改描述：优化计费
 @ 修改人：任波
-@ 修改日期：2020年12月11日
+@ 修改日期：2023年12月11日
 '''
 
 import time
@@ -35,12 +35,12 @@ class TempControl:
         self.lowDelta = float(self.tempConfig['lowdelta'])      # 低风温度变化率
         self.tempDefault = int(self.beginConfig['room' + str(self.roomID)])     # 初始温度
         self.tempNow = int(self.beginConfig['room' + str(self.roomID)])         # 室内温度
-        self.tempSet = 25           # 默认温度 25°
-        self.speedSet = 'mid'       # 默认风速 high mid low
-        self.runModel = 'cool'      # 默认运行状态 cool warm
-        self.runState = 'close'     # 用于指示是否运行 run close sleep waiting sleeping
+        self.tempSet = 25                     # 默认温度 25°
+        self.speedSet = 'mid'                 # 默认风速 high mid low
+        self.runModel = self.dp.Model      # 默认运行状态 cool warm
+        self.runState = 'close'               # 用于指示是否运行 run close sleep waiting sleeping
         self.cost= 0
-        self.totalCost = 0          # 计费
+        self.totalCost = 0                    # 计费
         self.dp = dp
         self.thread = threading.Thread(target=self.changeTemp)  # 创建线程
         self.thread.start()  # 启动线程
@@ -101,6 +101,7 @@ class TempControl:
                     if self.runState == 'running':
                         self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
                     self.runState = 'waiting'
+
 
                 if time.time() - t >= (60 / self.refreshSeq / self.timeSpeed):
                     t += (60 / self.refreshSeq / self.timeSpeed)
