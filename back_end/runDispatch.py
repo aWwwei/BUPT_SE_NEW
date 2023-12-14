@@ -5,13 +5,16 @@
 @ 创建人：任波
 @ 修改描述：添加插入调用
 @ 修改人：任波
-@ 修改日期：2020年12月7日
+@ 修改日期：2023年12月7日
 @ 修改描述：增加接口
 @ 修改人：任波
-@ 修改日期：2020年12月11日
+@ 修改日期：2023年12月11日
 @ 修改描述：整理为类
 @ 修改人：任波
-@ 修改日期：2020年12月13日
+@ 修改日期：2023年12月13日
+@ 修改描述：增设开关与模式控制
+@ 修改人：任波
+@ 修改日期：2023年12月14日
 '''
 import front_desk
 import ServerDispatch
@@ -22,6 +25,7 @@ import threading
 class Scheduler:
     def __init__(self):
         super(Scheduler, self).__init__()
+        self.switch = 0                                      # 开关
         self.Room = set()                                    # 房间集合
         self.database = front_desk.database()                # 获取数据库类
         self.dp = ServerDispatch.Dispatch(self.database)     # 获取调度类
@@ -31,8 +35,18 @@ class Scheduler:
         self.thread = threading.Thread(target=self.dfprint)  # 创建线程
         self.thread.start()                                  # 启动线程
 
+    def Switch(self,switch):
+        self.switch = switch
+        return switch
+    
+    def setModel(self,cool):
+        if self.switch:
+            return self.dp.setModel(cool)
+        return 'set end'
+    
     def setPrice(self,p):    # 设置费率
         self.dp.setPrice(p)
+        return p
 
     def monitor(self):       # 空调管理员查询
         dic = []
