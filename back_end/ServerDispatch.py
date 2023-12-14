@@ -7,10 +7,13 @@
 @ 修改日期：2023年12月2日
 @ 修改描述：添加插入调用属性，函数及队列
 @ 修改人：任波
-@ 修改日期：2020年12月7日
+@ 修改日期：2023年12月7日
 @ 修改描述：添加开关和状态判断
 @ 修改人：任波
-@ 修改日期：2020年12月11日
+@ 修改日期：2023年12月11日
+@ 修改描述：增设模式控制
+@ 修改人：任波
+@ 修改日期：2023年12月14日
 '''
 from database import DetailsTable
 from datetime import datetime
@@ -32,6 +35,7 @@ class Dispatch:
         self.speedA = 0     # roomIDA对应的风速（事实上始终为0）
         self.speedB = 0     # roomIDB对应的风速
         self.Price = 1      # 费率设定
+        self.Model='cool'
         self.stop_flag = threading.Event()                        # 线程停止
         config = ReadConfig.Config.getDispatch()
         self.flag = int(config['flag'])                           # 测试状态开关
@@ -48,6 +52,11 @@ class Dispatch:
     def setPrice(self,price):
         self.Price=price
 
+    def setModel(self,cool=1):
+        if cool:
+            self.Model = 'cool'
+        else:
+            self.Model = 'warm'
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()
