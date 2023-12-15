@@ -14,6 +14,9 @@
 @ 修改描述：增设模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
+@ 修改描述：优化调度逻辑
+@ 修改人：任波
+@ 修改日期：2023年12月15日
 '''
 from database import DetailsTable
 from datetime import datetime
@@ -63,8 +66,7 @@ class Dispatch:
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()
-        dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':0
-               
+        dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t
                }
 
         self.queueS.append(dic)
@@ -76,6 +78,8 @@ class Dispatch:
         dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t
                }
         self.queueW.append(dic)
+        if roomID == 2:
+            print('addToWait:2')
         return self.queueW
 
     # 从服务队列移除
@@ -87,9 +91,14 @@ class Dispatch:
 
     # 从等待队列移除
     def removeFromWait(self, roomID):
+        time.sleep(0.1)
         for item in self.queueW:
             if item['roomID'] == roomID:
                 self.queueW.remove(item)
+                if roomID==3:
+                    print('removeFromWait:3')
+                if roomID==2:
+                    print('removeFromWait:2')
                 break
 
     # 从等待队列移入服务队列
@@ -97,19 +106,39 @@ class Dispatch:
         for item in self.queueW:
             if item['roomID'] == roomID:
                 dic = item
-                dic['startT'] = 0
+                dic['startT'] = time.time()
                 self.queueS.append(dic)
                 self.queueW.remove(item)
+                if roomID==3:
+                    print('moveToServer:3')
+                if roomID==2:
+                    print('moveToServer:2')
                 break
+
+    def removeToServer(self, roomID):
+        for i in range(len(self.queueS)):
+            if self.queueS[i]['roomID'] == roomID:
+                for item in self.queueW:
+                    if item['roomID'] == roomID:
+                        self.queueW.remove(item)
+                        if roomID == 3:
+                            print('removeToServer:3')
+                        break
 
     # 从服务队列移入等待队列
     def moveToWait(self, roomID):
         for item in self.queueS:
             if item['roomID'] == roomID:
                 dic = item
-                dic['startT'] = time.time()
-                self.queueW.append(dic)
                 self.queueS.remove(item)
+                if time.time()-dic['startT']>3:
+                    dic['startT'] = time.time()
+                    self.queueW.append(dic)
+                else:
+                    dic['startT'] = time.time()
+                    self.queueW.insert(0, dic)
+                if roomID==3:
+                    print('moveToWait:3')
                 break
 
     def addWaitTime(self, startT):
@@ -191,6 +220,10 @@ class Dispatch:
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
                         self.removeFromWait(roomIDO)
+                        if roomIDO == 2:
+                            print('Dispatch:2加入服务 ')
+                        if roomIDO == 3:
+                            print('Dispatch:3加入服务 ')
                         #roomIDO,'加入服务 ',roomID,'退出等待')
                         return roomID, 0, roomIDO, speedO
 
@@ -308,7 +341,6 @@ class Dispatch:
     def updateQueue(self):
         while True:
             while (len(self.queueS) == self.queueSLen and len(self.queueW) > 0):
-                time.sleep(0.1/self.timeSpeed)
                 S=[]
                 W=[]
                 for item in self.queueS:
@@ -319,7 +351,7 @@ class Dispatch:
                 W_set = set(W)
                 for ID in S_set:
                     if ID in W_set:
-                        self.removeFromWait(ID)
+                        self.removeToServer(ID)
                 for item in self.queueW:
                     if time.time() >= item['waitT']+ item['startT']:
                         j=1
@@ -331,13 +363,17 @@ class Dispatch:
                                 self.speedB = item['speed']
                                 self.moveToWait(self.queueS[i]['roomID'])
                                 self.moveToServer(item['roomID'])
-                                #item['roomID'],'加入服务 ',self.queueS[i]['roomID'],'退出等待')
+                                if item['roomID'] == 2:
+                                    print('uptate:2加入服务 ')
+                                if item['roomID'] == 3:
+                                    print('uptate:3加入服务 ')
                                 break                           
                         if j:
                             self.roomIDA = 0
                             self.roomIDB = 0
                             self.speedA = 0
                             self.speedB = 0
+                        break
                     else:
                         self.roomIDA = 0
                         self.roomIDB = 0
