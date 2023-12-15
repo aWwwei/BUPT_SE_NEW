@@ -1,24 +1,34 @@
-'''
+"""
 @ 文件名：runDispatch.py
 @ 文件功能描述：调度的封装接口
-@ 创建日期：2023年12月7日
 @ 创建人：任波
+@ 创建日期：2023年12月7日
+
 @ 修改描述：添加插入调用
 @ 修改人：任波
 @ 修改日期：2023年12月7日
+
 @ 修改描述：增加接口
 @ 修改人：任波
 @ 修改日期：2023年12月11日
+
 @ 修改描述：整理为类
 @ 修改人：任波
 @ 修改日期：2023年12月13日
+
 @ 修改描述：增设开关与模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
+
 @ 修改描述：增设开关与模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
-'''
+
+@ 修改描述：修改返回值的精确度，删除用于测试的print函数
+@ 修改人：田健豪
+@ 修改日期：2023年12月15日
+"""
+
 import front_desk
 import ServerDispatch
 import TempControl
@@ -88,7 +98,6 @@ class Server:
                 print(i + 1, item)
                 item[0].to_excel(item[1], index=False)
                 i += 1
-        print('写入完成,用时', time.time() - t)
         self.database.close()
 
     def askdf(self,roomID,type): # 账单详单运行 非接口
@@ -172,17 +181,19 @@ class Server:
             self.dp.Insert(roomID, '关机', 'low', 'close', round(tem.totalCost, 4))
             tem.runState = 'close'
 
-        dic = {'当前温度': round(tem.tempNow, 4),
+        dic = {'当前温度': round(tem.tempNow, 2),
                # '目标温度': tem.tempSet,
                # '风速': tem.speedSet,
-               '状态': tem.runState,
-               '当前费用': round(tem.totalCost - tem.cost, 4),
-               '总费用': round(tem.totalCost, 4)}
+               # '状态': tem.runState,
+               '当前费用': round(tem.totalCost - tem.cost, 2),
+               '总费用': round(tem.totalCost, 2)}
+
         return dic
 
     def try_test(self,roomID=1, type=1):
-        thread = threading.Thread(target=self.try_Test, args=(roomID, type))  # 创建线程
-        thread.start()  # 启动线程
+        if self.dp.flag:
+            thread = threading.Thread(target=self.try_Test, args=(roomID, type))  # 创建线程
+            thread.start()  # 启动线程
 
     def try_Test(self,roomID, type):  # 运行测试用例，返回房间号对应的账单详单两个dataframe的列表
         if self.dp.flag:
@@ -220,13 +231,10 @@ class Server:
                 strS += str(item['roomID']) + ' '
             for item in self.dp.queueW:
                 strW += str(item['roomID']) + ' '
-            print('服务队列：', strS)
-            print('等待队列：', strW)
             while 1:
                 if times >= 26:
                     dflist = []
                     time.sleep(5)
-                    print('开始写入')
                     t0 = time.time()
                     for i in range(5):
                         tem = self.temSet[self.temID[i]]
@@ -240,11 +248,9 @@ class Server:
                         self.insert(df, 'details' + str(i + 1) + '.xlsx')
                         if i + 1 == roomID:
                             dflist.append(df)
-                    print('主程序运行完成,用时', time.time() - t0)
                     return dflist[type]
 
                 while (time.time() - t) >= 10:
-                    print('时间：', times)
                     t1 = time.time()
                     for i in range(5):
                         if msg0[i][times] != '':
@@ -253,7 +259,6 @@ class Server:
                             else:
                                 self.msg(i + 1, msg0[i][times][0], msg0[i][times][1], msg0[i][times][2])
                     t2 = time.time()
-                    print(t2 - t1)
                     strS = ''
                     strW = ''
                     time.sleep(2)
@@ -261,12 +266,9 @@ class Server:
                         strS += str(item['roomID']) + ' '
                     for item in self.dp.queueW:
                         strW += str(item['roomID']) + ' '
-                    print(time.time() - t - 10)
-                    print('服务队列：', strS)
-                    print('等待队列：', strW)
                     t += 10
                     times += 1
 
 if __name__ == '__main__':
-    sd = Server()
-    sd.try_test()
+    server = Server()
+    server.try_test(1, 1)
