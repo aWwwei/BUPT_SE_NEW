@@ -49,8 +49,11 @@ class Server:
         self.temSet = [None]*40                              # 房间温控集合
         self.temID = [0] * 40                                # 温控ID集合
         self.queueP = []                                     # print队列
+        self.queueM = []                                     # msg队列
         self.thread = threading.Thread(target=self.dfprint)  # 创建线程
         self.thread.start()                                  # 启动线程
+        self.thread0 = threading.Thread(target=self.queueMsg)# 创建线程
+        self.thread0.start()                                 # 启动线程
 
     def Switch(self,switch):
         self.switch = switch
@@ -64,6 +67,7 @@ class Server:
     
     def setPrice(self,p):    # 设置费率
         self.dp.setPrice(p)
+
         return p
 
     def monitor(self):       # 空调管理员查询
@@ -74,15 +78,15 @@ class Server:
                 dic.append(None)
             else:
                 dic.append({'当前温度': round(tem.tempNow, 2),
-                            '目标温度': tem.tempSet,
-                            '风速': tem.speedSet,
-                            '状态': tem.runState,
-                            '当前费用': round(tem.totalCost - tem.cost, 2),
-                            '总费用': round(tem.totalCost, 2)})
+                        '目标温度': tem.tempSet,
+                        '风速': tem.speedSet,
+                        '状态': tem.runState,
+                        '当前费用': round(tem.totalCost - tem.cost, 2),
+                        '总费用': round(tem.totalCost, 2)})
         return dic
 
     def schedule(self, roomID, event_type='送风请求', temp='', speed=''): # 空调请求
-        return self.msg(roomID, event_type, temp, speed)
+        return self.msgInsert(roomID, event_type, temp, speed)
 
     def ask_bill(self, roomID): # 查询账单
         return self.askdf(self, roomID, 0)
@@ -98,7 +102,7 @@ class Server:
         self.dp.queueS = []
         self.dp.queueW = []
         return 'close'
-        
+
     def insert(self,df, path): # 队列相关，非接口
         self.queueP.append([df, path])
 
@@ -112,6 +116,7 @@ class Server:
                 print(i + 1, item)
                 item[0].to_excel(item[1], index=False)
                 i += 1
+        print('写入完成,用时', time.time() - t)
         self.database.close()
 
     def askdf(self,roomID,type): # 账单详单运行 非接口
@@ -127,6 +132,17 @@ class Server:
             self.insert(df, 'bill' + str(roomID) + '.xlsx')
 
         return df
+
+    def msgInsert(self, roomID, env_type, temp, speed):
+        item = [roomID , env_type, temp, speed]
+        self.queueM.append(item)
+
+    def queueMsg(self):
+        while self.dp.open:
+            time.sleep(0.1)
+            if len(self.queueI)!=0:
+                item = self.queueM.pop(0)
+                self.msg(item[0], item[1],item[2], item[3])
 
     def msg(self, roomID, event_type='开机请求', temp='', speed=''):# 空调请求实际运行，非接口
 
@@ -150,7 +166,7 @@ class Server:
                 if temp =='':
                     tem.tempSet = 25
                 else:
-                    tem.tempSet = temp
+                    tem.tempSet = (int(temp))
 
                 if speed =='':
                     tem.speedSet = 'mid'
