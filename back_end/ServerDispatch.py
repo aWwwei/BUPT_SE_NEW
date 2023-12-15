@@ -107,7 +107,7 @@ class Dispatch:
                 dic['startT'] = time.time()
                 dic['place'] = place
                 self.queueS.append(dic)
-                self.queueW.remove(item
+                self.queueW.remove(item)
                 break
             place+=1
 
@@ -199,7 +199,6 @@ class Dispatch:
                         self.removeFromServer(roomID)
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
-                        #roomIDO,'加入服务 ',roomID,'退出等待')
                         return roomID, 0, roomIDO, speedO
                         # 等待队列无高风速，至少有一个中风速
             elif highNum == 0 and midNum >= 1:
@@ -210,11 +209,6 @@ class Dispatch:
                         self.removeFromServer(roomID)
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
-                        if roomIDO == 2:
-                            print('Dispatch:2加入服务 ')
-                        if roomIDO == 3:
-                            print('Dispatch:3加入服务 ')
-                        #roomIDO,'加入服务 ',roomID,'退出等待')
                         return roomID, 0, roomIDO, speedO
 
                     # 等待队列中的风速都小于等于新请求

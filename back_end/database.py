@@ -31,7 +31,7 @@ class UserTable:
         sql = 'insert into users (username,password) values (%s,%s);'
 
         try:
-            self.cursor.execute(sql, [username, argon2.hash(password)])
+            self.cursor.execute(sql, [username, password])
             self.db.commit()
         except Exception as e:
             print(e)
@@ -49,7 +49,7 @@ class UserTable:
         try:
             self.cursor.execute(sql, username)
             hashed_password = self.cursor.fetchone()[0]  # 取元组中的第一个值
-            return argon2.verify(password, hashed_password)
+            return password == hashed_password
         except Exception as e:
             print(e)
             self.db.rollback()

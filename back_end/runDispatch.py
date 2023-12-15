@@ -87,10 +87,10 @@ class Server:
         return self.msg(roomID, event_type, temp, speed)
 
     def ask_bill(self, roomID): # 查询账单
-        return self.askdf(self, roomID, 0)
+        return self.askdf(roomID, 0)
 
     def ask_details(self, roomID): # 查询详单
-        return self.askdf(self, roomID, 1)
+        return self.askdf(roomID, 1)
 
     def closeServer(self):         # 关闭中央空调及调度
         self.dp.open = 0
@@ -112,6 +112,7 @@ class Server:
             if len(self.queueP) != 0:
                 item = self.queueP.pop(0)
                 print(i + 1, item)
+
                 item[0].to_excel(item[1], index=False)
                 i += 1
         print('写入完成,用时', time.time() - t)
@@ -199,9 +200,6 @@ class Server:
             tem.runState = 'closed'
 
         dic = {'当前温度': round(tem.tempNow, 2),
-               # '目标温度': tem.tempSet,
-               # '风速': tem.speedSet,
-               # '状态': tem.runState,
                '当前费用': round(tem.totalCost - tem.cost, 2),
                '总费用': round(tem.totalCost, 2)}
 

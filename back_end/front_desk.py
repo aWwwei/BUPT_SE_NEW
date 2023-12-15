@@ -18,11 +18,9 @@ def print_bill(check_table, room_id, total_cost):
     check_in_time = check_table.fetch_one(room_id)[0]
 
     check_in_time = check_in_time.strftime("%Y-%m-%d %H:%M:%S")
-    print(check_in_time)
     check_out_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    print(check_out_time)
 
-    df = pd.DataFrame({'房间号': [room_id], '入住时间': [check_in_time], '离开时间': [check_out_time], '总费用': [str(total_cost)]})
+    df = pd.DataFrame({'房间号': [room_id], '入住时间': [check_in_time], '离开时间': [check_out_time], '总费用': [total_cost]})
     return df
     #df.to_excel('bill.xlsx', index=False)
 
@@ -109,25 +107,25 @@ def print_details(details_table, room_id):
 if __name__ == '__main__':
     database = database()
 
-    # check_table = create_check_table(database)
-    # # 登记房间入住时间
-    # check_table.check_in(1)
-    # # 打印账单
-    # print_bill(check_table, 1)
-    dp = ServerDispatch.Dispatch(database)
+    check_table = create_check_table(database)
+    # 登记房间入住时间
+    check_table.check_in(1)
+    # 打印账单
+    print_bill(check_table, 1, 1)
+    # dp = ServerDispatch.Dispatch(database)
 
-    details_table = create_details_table(database)
-
-    dp.Insert(1, '开机', 'mid', 'waiting', 0)
-    time.sleep(1)
-    dp.Insert(1, '修改风速', 'high', 'running', 0)
-    time.sleep(1)
-    dp.Insert(1, '修改风速', 'mid', 'running', 1)
-
-    dp.Insert(1, '关机', 'low', 'closed', 1)
-    time.sleep(5)
-    t1=time.time()
-    print_details(dp.details_table, 1)
-    print(time.time()-t1)
+    # details_table = create_details_table(database)
+    #
+    # dp.Insert(1, '开机', 'mid', 'waiting', 0)
+    # time.sleep(1)
+    # dp.Insert(1, '修改风速', 'high', 'running', 0)
+    # time.sleep(1)
+    # dp.Insert(1, '修改风速', 'mid', 'running', 1)
+    #
+    # dp.Insert(1, '关机', 'low', 'closed', 1)
+    # time.sleep(5)
+    # t1=time.time()
+    # print_details(dp.details_table, 1)
+    # print(time.time()-t1)
 
     database.close()
