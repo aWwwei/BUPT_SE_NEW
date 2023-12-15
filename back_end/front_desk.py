@@ -1,8 +1,40 @@
+"""
+@ 文件名：  front_desk.py
+@ 文件功能描述： 前台打印账单和详单的逻辑
+@ 创建人：   田健豪
+@ 创建日期： 2023年12月7日
+
+@ 修改描述： 增加函数create_check_table，用于创建账单表
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月7日
+
+@ 修改描述： 增加函数create_details_table，用于创建详单表
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月7日
+
+@ 修改描述： 增加函数print_bill，用于打印账单
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月7日
+
+@ 修改描述： 增加类DetailsList，用于存储详单信息
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月7日
+
+@ 修改描述： 增加函数print_details，用于打印详单
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月7日
+
+@ 修改描述： 修改print_details存储时间的格式
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月7日
+"""
+
+
+
+
 from database import database, CheckTable, DetailsTable
 import time
 import pandas as pd
-import ServerDispatch
-from datetime import datetime
 
 
 def create_check_table(db):
@@ -76,17 +108,17 @@ def print_details(details_table, room_id):
         elif event_type[i] == '修改风速':
             if details_list.room_state == 'running':
                 details_list.service_end_time = event_time[i]
-                df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
-                                '服务开始时间': details_list.service_start_time,
-                                '服务结束时间': details_list.service_end_time,
+                df = df.append({'房间号': room_id, '请求时间': details_list.request_time.strftime("%Y-%m-%d %H:%M:%S"),
+                                '服务开始时间': details_list.service_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                                '服务结束时间': details_list.service_end_time.strftime("%Y-%m-%d %H:%M:%S"),
                                 '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
                 if room_state[i] == 'running':
                     details_list.service_start_time = event_time[i]
             elif details_list.check_room_state(event_time[i], room_state[i]):
-                df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
-                                '服务开始时间': details_list.service_start_time,
-                                '服务结束时间': details_list.service_end_time,
+                df = df.append({'房间号': room_id, '请求时间': details_list.request_time.strftime("%Y-%m-%d %H:%M:%S"),
+                                '服务开始时间': details_list.service_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                                '服务结束时间': details_list.service_end_time.strftime("%Y-%m-%d %H:%M:%S"),
                                 '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.wind_speed = wind_speed[i]
@@ -94,9 +126,9 @@ def print_details(details_table, room_id):
         elif event_type[i] == '关机':
             if details_list.room_state == 'running':
                 details_list.service_end_time = event_time[i]
-                df = df.append({'房间号': room_id, '请求时间': details_list.request_time,
-                                '服务开始时间': details_list.service_start_time,
-                                '服务结束时间': details_list.service_end_time,
+                df = df.append({'房间号': room_id, '请求时间': details_list.request_time.strftime("%Y-%m-%d %H:%M:%S"),
+                                '服务开始时间': details_list.service_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                                '服务结束时间': details_list.service_end_time.strftime("%Y-%m-%d %H:%M:%S"),
                                 '服务时长': str(details_list.service_end_time - details_list.service_start_time),
                                 '风速': details_list.wind_speed, '当前费用': cost[i], '费率': 1}, ignore_index=True)
             details_list.room_state = room_state[i]

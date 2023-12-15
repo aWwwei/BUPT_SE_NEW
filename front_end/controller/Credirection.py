@@ -73,6 +73,36 @@ class MyWidget(controller.Ui_Client, QWidget):
 
     def slot_init(self):
         self.pushButton_switch.clicked.connect(self.pushButton_switch_clicked)
+        self.pushButton_down.clicked.connect(self.pushButton_down_clicked)
+        self.pushButton_up.clicked.connect(self.pushButton_up_clicked)
+        self.pushButton_low.clicked.connect(self.pushButton_low_clicked)
+        self.pushButton_mid.clicked.connect(self.pushButton_mid_clicked)
+        self.pushButton_high.clicked.connect(self.pushButton_high_clicked)
+        self.pushButton_check.clicked.connect(self.pushButton_check_clicked)
+
+    def pushButton_down_clicked(self):
+        self.textBrowser_target_tem.setText(str(int(self.textBrowser_target_tem.toPlainText()) - 1))
+
+    def pushButton_up_clicked(self):
+        self.textBrowser_target_tem.setText(str(int(self.textBrowser_target_tem.toPlainText()) + 1))
+
+    def pushButton_low_clicked(self):
+        self.textBrowser_speed.setText("low")
+
+    def pushButton_mid_clicked(self):
+        self.textBrowser_speed.setText("mid")
+
+    def pushButton_high_clicked(self):
+        self.textBrowser_speed.setText("high")
+
+    def pushButton_check_clicked(self):
+        if self.state == 'on':
+            data = requests.post(f"http://127.0.0.1:5000/set_wind_speed", data={
+                "room_id": self.room_id,
+                "wind_speed": self.textBrowser_speed.toPlainText(),
+                "target_temperature": self.textBrowser_target_tem.toPlainText()
+            })
+
 
     def pushButton_switch_clicked(self):
         if self.state == 'off':
@@ -123,12 +153,12 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window1 = MyWindow()
     window1.show()
-    # window2 = MyWindow()
-    # window2.show()
-    # window3 = MyWindow()
-    # window3.show()
-    # window4 = MyWindow()
-    # window4.show()
-    # window5 = MyWindow()
-    # window5.show()
+    window2 = MyWindow()
+    window2.show()
+    window3 = MyWindow()
+    window3.show()
+    window4 = MyWindow()
+    window4.show()
+    window5 = MyWindow()
+    window5.show()
     sys.exit(app.exec_())

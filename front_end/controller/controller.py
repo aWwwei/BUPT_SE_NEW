@@ -1,3 +1,17 @@
+'''
+@文件名：controller.py
+@文件功能描述：用户界面：可以调节空调的开关状态、目标温度、风速；实时数据面板可以查看当前温度、当前费用及总费用
+@创建日期：2023年12月15日
+@创建人：杨欣悦
+
+@ 修改描述：增加图标
+@ 修改人：杨欣悦
+@ 修改日期：2023年12月15日
+
+@ 修改描述：修改拼写错误
+@ 修改人：田健豪
+@ 修改日期：2023年12月15日
+'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'controller.ui'
@@ -80,8 +94,6 @@ class Ui_Client(object):
         self.pushButton_switch = QtWidgets.QPushButton(self.frame_3)
         self.pushButton_switch.setGeometry(QtCore.QRect(250, 10, 91, 31))
         self.pushButton_switch.setStyleSheet("\n"
-"\n"
-"\n"
 "QPushButton{\n"
 "    font: 12pt \"黑体\";\n"
 "    background-color: rgba(255, 255, 255, 0);\n"
@@ -111,7 +123,8 @@ class Ui_Client(object):
         self.pushButton_switch.setObjectName("pushButton_switch")
         self.widget = QtWidgets.QWidget(self.frame_3)
         self.widget.setGeometry(QtCore.QRect(10, 10, 31, 31))
-        self.widget.setStyleSheet("image: url(:/用户界面/人.png);    background-color: rgb(234, 245, 255);\n"
+        self.widget.setStyleSheet("image: url(:/用户界面/人.png);\n"
+"background-color: rgb(234, 245, 255);\n"
 "")
         self.widget.setObjectName("widget")
         self.label_RoomName = QtWidgets.QLabel(self.frame_3)
@@ -119,11 +132,11 @@ class Ui_Client(object):
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(9)
-        font.setBold(False)
+        font.setBold(True)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(75)
         self.label_RoomName.setFont(font)
-        self.label_RoomName.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
+        self.label_RoomName.setStyleSheet("\n"
 "    background-color: rgb(234, 245, 255);")
         self.label_RoomName.setObjectName("label_RoomName")
         self.verticalLayout.addWidget(self.frame_3)
@@ -148,12 +161,11 @@ class Ui_Client(object):
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(9)
-        font.setBold(False)
+        font.setBold(True)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(75)
         self.label.setFont(font)
-        self.label.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"    background-color: rgb(234, 245, 255);")
+        self.label.setStyleSheet("background-color: rgb(234, 245, 255);")
         self.label.setObjectName("label")
         self.layoutWidget_2 = QtWidgets.QWidget(self.frame_4)
         self.layoutWidget_2.setGeometry(QtCore.QRect(10, 30, 341, 71))
@@ -220,6 +232,11 @@ class Ui_Client(object):
         self.label_current_fee.setObjectName("label_current_fee")
         self.label_13 = QtWidgets.QLabel(self.frame_6)
         self.label_13.setGeometry(QtCore.QRect(81, 27, 31, 41))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_13.setFont(font)
         self.label_13.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
         self.label_13.setObjectName("label_13")
         self.horizontalLayout.addWidget(self.frame_6)
@@ -250,6 +267,7 @@ class Ui_Client(object):
         self.label_14 = QtWidgets.QLabel(self.frame_7)
         self.label_14.setGeometry(QtCore.QRect(78, 27, 31, 41))
         font = QtGui.QFont()
+        font.setFamily("微软雅黑")
         font.setBold(False)
         font.setWeight(50)
         self.label_14.setFont(font)
@@ -356,14 +374,11 @@ class Ui_Client(object):
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(9)
-        font.setBold(False)
+        font.setBold(True)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(75)
         self.textBrowser.setFont(font)
-        self.textBrowser.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"\n"
-"border-radius:25px;\n"
-"    background-color: rgb(234, 245, 255);")
+        self.textBrowser.setStyleSheet("background-color: rgb(234, 245, 255);")
         self.textBrowser.setObjectName("textBrowser")
         self.horizontalLayout_3.addWidget(self.textBrowser)
         self.textBrowser_target_tem = QtWidgets.QTextBrowser(self.layoutWidget_4)
@@ -379,11 +394,9 @@ class Ui_Client(object):
         font.setPointSize(9)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(50)
         self.textBrowser_target_tem.setFont(font)
-        self.textBrowser_target_tem.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"border-radius:25px;\n"
-"    background-color: rgb(234, 245, 255);")
+        self.textBrowser_target_tem.setStyleSheet("background-color: rgb(234, 245, 255);")
         self.textBrowser_target_tem.setReadOnly(False)
         self.textBrowser_target_tem.setObjectName("textBrowser_target_tem")
         self.horizontalLayout_3.addWidget(self.textBrowser_target_tem)
@@ -412,12 +425,11 @@ class Ui_Client(object):
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(9)
-        font.setBold(False)
+        font.setBold(True)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(75)
         self.textBrowser_3.setFont(font)
-        self.textBrowser_3.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"border-radius:25px;    background-color: rgb(234, 245, 255);")
+        self.textBrowser_3.setStyleSheet("background-color: rgb(234, 245, 255);")
         self.textBrowser_3.setObjectName("textBrowser_3")
         self.horizontalLayout_4.addWidget(self.textBrowser_3)
         self.textBrowser_mode = QtWidgets.QTextBrowser(self.layoutWidget_5)
@@ -433,11 +445,9 @@ class Ui_Client(object):
         font.setPointSize(9)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(50)
         self.textBrowser_mode.setFont(font)
-        self.textBrowser_mode.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"border-radius:25px;\n"
-"    background-color: rgb(234, 245, 255);")
+        self.textBrowser_mode.setStyleSheet("    background-color: rgb(234, 245, 255);")
         self.textBrowser_mode.setReadOnly(False)
         self.textBrowser_mode.setObjectName("textBrowser_mode")
         self.horizontalLayout_4.addWidget(self.textBrowser_mode)
@@ -521,9 +531,9 @@ class Ui_Client(object):
 "")
         self.pushButton_mid.setText("")
         self.pushButton_mid.setObjectName("pushButton_mid")
-        self.pushButton_hign = QtWidgets.QPushButton(self.frame_11)
-        self.pushButton_hign.setGeometry(QtCore.QRect(90, 50, 21, 23))
-        self.pushButton_hign.setStyleSheet("\n"
+        self.pushButton_high = QtWidgets.QPushButton(self.frame_11)
+        self.pushButton_high.setGeometry(QtCore.QRect(90, 50, 21, 23))
+        self.pushButton_high.setStyleSheet("\n"
 "\n"
 "\n"
 "QPushButton{\n"
@@ -543,8 +553,8 @@ class Ui_Client(object):
 "border:4px outset rgba(36, 36, 36,0);\n"
 "}\n"
 "")
-        self.pushButton_hign.setText("")
-        self.pushButton_hign.setObjectName("pushButton_hign")
+        self.pushButton_high.setText("")
+        self.pushButton_high.setObjectName("pushButton_high")
         self.layoutWidget_6 = QtWidgets.QWidget(self.frame_11)
         self.layoutWidget_6.setGeometry(QtCore.QRect(20, 5, 82, 31))
         self.layoutWidget_6.setObjectName("layoutWidget_6")
@@ -564,13 +574,11 @@ class Ui_Client(object):
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
         font.setPointSize(9)
-        font.setBold(False)
+        font.setBold(True)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(75)
         self.textBrowser_5.setFont(font)
-        self.textBrowser_5.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"border-radius:25px;\n"
-"    background-color: rgb(234, 245, 255);")
+        self.textBrowser_5.setStyleSheet("background-color: rgb(234, 245, 255);")
         self.textBrowser_5.setObjectName("textBrowser_5")
         self.horizontalLayout_5.addWidget(self.textBrowser_5)
         self.textBrowser_speed = QtWidgets.QTextBrowser(self.layoutWidget_6)
@@ -586,11 +594,9 @@ class Ui_Client(object):
         font.setPointSize(9)
         font.setBold(False)
         font.setItalic(False)
-        font.setWeight(9)
+        font.setWeight(50)
         self.textBrowser_speed.setFont(font)
-        self.textBrowser_speed.setStyleSheet("font: 75 9pt \"微软雅黑\";\n"
-"border-radius:25px;\n"
-"    background-color: rgb(234, 245, 255);")
+        self.textBrowser_speed.setStyleSheet("background-color: rgb(234, 245, 255);")
         self.textBrowser_speed.setReadOnly(False)
         self.textBrowser_speed.setObjectName("textBrowser_speed")
         self.horizontalLayout_5.addWidget(self.textBrowser_speed)
@@ -617,32 +623,32 @@ class Ui_Client(object):
         self.textBrowser.setHtml(_translate("Client", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:72; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">目标温度</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">目标温度</p></body></html>"))
         self.textBrowser_target_tem.setHtml(_translate("Client", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:72; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">25</p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:72;\">25</span></p></body></html>"))
         self.textBrowser_3.setHtml(_translate("Client", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:72; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">模式</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">模式</p></body></html>"))
         self.textBrowser_mode.setHtml(_translate("Client", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:72; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">制冷</p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:72;\">制冷</span></p></body></html>"))
         self.textBrowser_5.setHtml(_translate("Client", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:72; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">风速</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">风速</p></body></html>"))
         self.textBrowser_speed.setHtml(_translate("Client", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:72; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:400;\">中</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'微软雅黑\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">mid</p></body></html>"))
 
 import picture_rc

@@ -1,3 +1,13 @@
+'''
+@文件名：Slogin.py
+@文件功能描述：管理员登陆界面，输入用户名和密码后进入管理员界面
+@创建日期：2023年12月15日
+@创建人：杨欣悦
+
+@ 修改描述：增加图标
+@ 修改人：杨欣悦
+@ 修改日期：2023年12月15日
+'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'Slogin.ui'
@@ -158,18 +168,18 @@ class Ui_MainWindow(object):
 "border-with:0;border-style:outset；")
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout_6.addWidget(self.widget_2)
-        self.lineEdit_user_name = QtWidgets.QLineEdit(self.frame_7)
-        self.lineEdit_user_name.setStyleSheet("QLineEdit{\n"
+        self.lineEdit_username = QtWidgets.QLineEdit(self.frame_7)
+        self.lineEdit_username.setStyleSheet("QLineEdit{\n"
 "    background-color: rgba(255, 255, 255, 0);\n"
 "    selection-color: rgb(34, 34, 34);\n"
 "border-with:0;border-style:outset；\n"
 "}\n"
 "\n"
 "")
-        self.lineEdit_user_name.setText("")
-        self.lineEdit_user_name.setEchoMode(QtWidgets.QLineEdit.Normal)
-        self.lineEdit_user_name.setObjectName("lineEdit_user_name")
-        self.horizontalLayout_6.addWidget(self.lineEdit_user_name)
+        self.lineEdit_username.setText("")
+        self.lineEdit_username.setEchoMode(QtWidgets.QLineEdit.Normal)
+        self.lineEdit_username.setObjectName("lineEdit_username")
+        self.horizontalLayout_6.addWidget(self.lineEdit_username)
         self.horizontalLayout_6.setStretch(0, 1)
         self.horizontalLayout_6.setStretch(1, 9)
         self.verticalLayout_4.addWidget(self.frame_7)
@@ -283,7 +293,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Admin Login"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" color:#3a3a3a;\">WELCOME</span></p></body></html>"))
         self.label_2.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600; color:#393939;\">欢迎使用温控系统</span></p></body></html>"))
-        self.lineEdit_user_name.setPlaceholderText(_translate("MainWindow", "请输入用户名"))
+        self.lineEdit_username.setPlaceholderText(_translate("MainWindow", "请输入用户名"))
         self.lineEdit_password.setPlaceholderText(_translate("MainWindow", "请输入管理员密码"))
         self.pushButton_sign_in.setText(_translate("MainWindow", "SIGN  IN"))
 

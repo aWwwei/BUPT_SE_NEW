@@ -73,7 +73,7 @@ class MyWindow(Slogin.Ui_MainWindow, QMainWindow):
 
     def login(self):
         # 在这里添加您的登录逻辑
-        username_input = self.lineEdit_user_name.text()
+        username_input = self.lineEdit_username.text()
         password_input = self.lineEdit_password.text()
 
         if username_input == "":

@@ -1,3 +1,13 @@
+'''
+@文件名：Clogin.py
+@文件功能描述：用户登陆界面，输入房间号和密码后进入用户界面
+@创建日期：2023年12月15日
+@创建人：杨欣悦
+
+@ 修改描述：增加图标
+@ 修改人：杨欣悦
+@ 修改日期：2023年12月15日
+'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'Clogin.ui'

@@ -24,6 +24,14 @@
 @ 修改描述：固定显示界面窗口大小
 @ 修改人：孟祥超
 @ 修改日期：2023年12月14日
+
+@ 修改描述：添加界面图标
+@ 修改人：田健豪
+@ 修改日期：2023年12月15日
+
+@ 修改描述：修改表格和窗口大小
+@ 修改人：田健豪
+@ 修改日期：2023年12月15日
 '''
 
 import requests
@@ -34,7 +42,7 @@ import photo_rc
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.setFixedSize(950, 547) #设置窗口固定大小
+        Form.setFixedSize(1060, 547) #设置窗口固定大小
         # 取消最大化按钮
         flags = QtCore.Qt.WindowFlags(
             QtCore.Qt.Window | QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
@@ -45,7 +53,7 @@ class Ui_Form(object):
         Form.setStyleSheet("background-color: rgb(230, 245, 255);")
         self.tableView = QtWidgets.QTableView(Form)
         #表格大小
-        self.tableView.setGeometry(QtCore.QRect(150, 200, 730, 291))
+        self.tableView.setGeometry(QtCore.QRect(150, 200, 890, 291))
         self.tableView.setObjectName("tableView")
         self.tableView.horizontalHeader().setVisible(False)
         self.tableView.verticalHeader().setVisible(False)
@@ -228,8 +236,7 @@ class MyForm(Ui_Form,QtWidgets.QWidget):
 
         # 添加可变参数到表格
         response = requests.post("http://127.0.0.1:5000/print_details", data={"room_id":room_id})
-        print(response.json())
-        details = response.json()['details']
+        details = response.json()['bill']
         args1 = details["请求时间"]
         args2 = details["服务开始时间"]
         args3 = details["服务结束时间"]

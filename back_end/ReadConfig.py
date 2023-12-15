@@ -35,5 +35,3 @@ class Config:
         test = dict(test)
         return test
 
-if __name__ == '__main__':
-    print(Config.getDatebase())

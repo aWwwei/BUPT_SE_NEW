@@ -1,3 +1,13 @@
+'''
+@文件名：Suiwidget.py
+@文件功能描述：管理员界面，可以实现中央空调的调节及各个房间的监控：调节包括总开关、费率、温度区间、模式；监控面板可以看到各个房间的状态、风速、当前温度、目标温度、当前费用及总费用。
+@创建日期：2023年12月15日
+@创建人：杨欣悦
+
+@ 修改描述：增加图标
+@ 修改人：杨欣悦
+@ 修改日期：2023年12月15日
+'''
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'Suiwidget.ui'
@@ -38,6 +48,9 @@ class Ui_Admin(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame_2 = QtWidgets.QFrame(self.layoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        self.frame_2.setFont(font)
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -394,7 +407,8 @@ class Ui_Admin(object):
 "border-color: rgb(163, 163, 163);")
         self.lcdNumber_t_low.setSmallDecimalPoint(False)
         self.lcdNumber_t_low.setMode(QtWidgets.QLCDNumber.Dec)
-        self.lcdNumber_t_low.setProperty("value", 16.0)
+        self.lcdNumber_t_low.setProperty("value", 18.0)
+        self.lcdNumber_t_low.setProperty("intValue", 18)
         self.lcdNumber_t_low.setObjectName("lcdNumber_t_low")
         self.horizontalLayout_8.addWidget(self.frame_18)
         self.label_3 = QtWidgets.QLabel(self.layoutWidget_9)
@@ -440,7 +454,8 @@ class Ui_Admin(object):
 "border-color: rgb(163, 163, 163);")
         self.lcdNumber_t_high.setSmallDecimalPoint(False)
         self.lcdNumber_t_high.setMode(QtWidgets.QLCDNumber.Dec)
-        self.lcdNumber_t_high.setProperty("value", 24.0)
+        self.lcdNumber_t_high.setProperty("value", 28.0)
+        self.lcdNumber_t_high.setProperty("intValue", 28)
         self.lcdNumber_t_high.setObjectName("lcdNumber_t_high")
         self.horizontalLayout_9.addWidget(self.frame_25)
         self.label_6 = QtWidgets.QLabel(self.layoutWidget_10)
@@ -743,6 +758,9 @@ class Ui_Admin(object):
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.frame_179.sizePolicy().hasHeightForWidth())
         self.frame_179.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        self.frame_179.setFont(font)
         self.frame_179.setStyleSheet("#frame_179{\n"
 "\n"
 "border-radius:10px;\n"
@@ -790,6 +808,9 @@ class Ui_Admin(object):
         self.label_2.setObjectName("label_2")
         self.label_mode_value = QtWidgets.QLabel(self.frame_61)
         self.label_mode_value.setGeometry(QtCore.QRect(45, 3, 37, 22))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        self.label_mode_value.setFont(font)
         self.label_mode_value.setStyleSheet("")
         self.label_mode_value.setObjectName("label_mode_value")
         self.horizontalLayout_39.addWidget(self.frame_61)
@@ -1726,7 +1747,7 @@ class Ui_Admin(object):
         self.frame_30.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_30.setObjectName("frame_30")
         self.layoutWidget_33 = QtWidgets.QWidget(self.frame_30)
-        self.layoutWidget_33.setGeometry(QtCore.QRect(6, 3, 93, 25))
+        self.layoutWidget_33.setGeometry(QtCore.QRect(6, 3, 93, 27))
         self.layoutWidget_33.setObjectName("layoutWidget_33")
         self.horizontalLayout_23 = QtWidgets.QHBoxLayout(self.layoutWidget_33)
         self.horizontalLayout_23.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
