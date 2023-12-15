@@ -1,20 +1,20 @@
 '''
 @ 文件名：TempControl.py
 @ 文件功能描述：负责控制服务端温度变化的温度控制器类
-@ 创建日期：2023年11月29日
 @ 创建人：任波
+@ 创建日期：2023年11月29日
+
 @ 修改描述：添加插入调用
 @ 修改人：任波
 @ 修改日期：2023年12月7日
+
 @ 修改描述：修改状态判断
 @ 修改人：任波
 @ 修改日期：2023年12月10日
+
 @ 修改描述：优化计费
 @ 修改人：任波
 @ 修改日期：2023年12月11日
-@ 修改描述：优化调度逻辑
-@ 修改人：任波
-@ 修改日期：2023年12月15日
 '''
 
 import time
@@ -42,7 +42,7 @@ class TempControl:
         self.tempSet = 25                     # 默认温度 25°
         self.speedSet = 'mid'                 # 默认风速 high mid low
         self.runModel = self.dp.Model      # 默认运行状态 cool warm
-        self.runState = 'close'               # 用于指示是否运行 run close sleep waiting sleeping
+        self.runState = 'closed'               # 用于指示是否运行 run close sleep waiting sleeping
         self.cost= 0
         self.totalCost = 0                    # 计费
         self.thread = threading.Thread(target=self.changeTemp)  # 创建线程
@@ -104,16 +104,6 @@ class TempControl:
                 if self.runState == 'running':
                     self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
                 self.runState = 'waiting'
-
-            #if time.time() - t1 >= (12 / self.refreshSeq / self.timeSpeed):
-             #   t1 = time.time()
-                #if self.runState != 'close':
-                 #   if self.speedSet == 'high':
-                  #      self.dp.requestWind(self.roomID, 3)
-                   # elif self.speedSet == 'mid':
-                    #    self.dp.requestWind(self.roomID, 2)
-                    #elif self.speedSet == 'low':
-                     #   self.dp.requestWind(self.roomID, 1)
 
             if time.time() - t >= (60 / self.refreshSeq / self.timeSpeed):
                 t += (60 / self.refreshSeq / self.timeSpeed)
@@ -201,7 +191,7 @@ class TempControl:
                 #    elif self.tempNow > self.tempDefault:
                 #        self.tempNow -= 0.5 / self.refreshSeq
 
-                elif self.runState == 'close':
+                elif self.runState == 'closed':
                     if self.tempNow < self.tempDefault:
                         self.tempNow += 0.5 / self.refreshSeq
                     elif self.tempNow > self.tempDefault:
