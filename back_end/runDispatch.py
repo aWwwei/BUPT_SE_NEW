@@ -169,7 +169,7 @@ class Server:
                     tem.speedSet = 'low'
                     self.dp.requestWind(tem.roomID, 1)
                 tem.cost = tem.totalCost
-                self.dp.Insert(roomID, '开机', 'mid', tem.runState, round(tem.totalCost, 4))
+                self.dp.Insert(roomID, '开机', speed, tem.runState, round(tem.totalCost, 4))
 
 
         elif event_type == '送风请求':
@@ -196,7 +196,7 @@ class Server:
             tem.runState = 'closed'
             self.dp.stopWind(tem.roomID)
             time.sleep(0.2)
-            self.dp.Insert(roomID, '关机', 'low', 'closed', round(tem.totalCost, 4))
+            self.dp.Insert(roomID, '关机', tem.speedSet, 'closed', round(tem.totalCost, 4))
             tem.runState = 'closed'
 
         dic = {'当前温度': round(tem.tempNow, 2),
