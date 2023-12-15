@@ -20,13 +20,16 @@
 @ 修改人：任波
 @ 修改日期：2023年12月14日
 
-
 @ 修改描述：增设开关与模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
 
 @ 修改描述：修改返回值的精确度，删除用于测试的print函数
 @ 修改人：田健豪
+@ 修改日期：2023年12月15日
+
+@ 修改描述：调整开关
+@ 修改人：任波
 @ 修改日期：2023年12月15日
 """
 
@@ -56,6 +59,7 @@ class Server:
     def setModel(self,cool):
         if self.switch:
             return self.dp.setModel(cool)
+        self.dp.open = 1
         return 'set end'
     
     def setPrice(self,p):    # 设置费率
@@ -86,6 +90,15 @@ class Server:
     def ask_details(self, roomID): # 查询详单
         return self.askdf(self, roomID, 1)
 
+    def closeServer(self):         # 关闭中央空调及调度
+        self.dp.open = 0
+        for tem in self.temSet:
+            if tem is not None:
+                tem.runState='closed'
+        self.dp.queueS = []
+        self.dp.queueW = []
+        return 'close'
+        
     def insert(self,df, path): # 队列相关，非接口
         self.queueP.append([df, path])
 
