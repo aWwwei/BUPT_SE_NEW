@@ -193,7 +193,6 @@ class Dispatch:
                         self.removeFromServer(roomID)
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
-                        self.removeFromWait(roomIDO)
                         #roomIDO,'加入服务 ',roomID,'退出等待')
                         return roomID, 0, roomIDO, speedO
                         # 等待队列无高风速，至少有一个中风速
@@ -205,7 +204,6 @@ class Dispatch:
                         self.removeFromServer(roomID)
                         self.addToWait(roomID, speedValue)
                         self.moveToServer(roomIDO)
-                        self.removeFromWait(roomIDO)
                         if roomIDO == 2:
                             print('Dispatch:2加入服务 ')
                         if roomIDO == 3:
