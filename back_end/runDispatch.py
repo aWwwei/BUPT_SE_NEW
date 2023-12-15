@@ -15,6 +15,9 @@
 @ 修改描述：增设开关与模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
+@ 修改描述：增设开关与模式控制
+@ 修改人：任波
+@ 修改日期：2023年12月14日
 '''
 import front_desk
 import ServerDispatch
@@ -89,8 +92,6 @@ class Server:
         self.database.close()
 
     def askdf(self,roomID,type): # 账单详单运行 非接口
-        thread = threading.Thread(target=self.dfprint)  # 创建线程
-        thread.start()  # 启动线程
         if type:
             tem = self.temSet[self.temID[roomID - 1]]
             tem.runState = 'close'
@@ -123,11 +124,26 @@ class Server:
                     tem.runState = 'running'
                 else:
                     tem.runState = 'waiting'
-                tem.tempSet = 25
-                tem.speedSet = 'mid'
+                if temp =='':
+                    tem.tempSet = 25
+                else:
+                    tem.tempSet = temp
+
+                if speed =='':
+                    tem.speedSet = 'mid'
+                    self.dp.requestWind(tem.roomID, 2)
+                elif speed == 'high':
+                    tem.speedSet = 'high'
+                    self.dp.requestWind(tem.roomID, 3)
+                elif speed == 'mid':
+                    tem.speedSet = 'mid'
+                    self.dp.requestWind(tem.roomID, 2)
+                elif speed == 'low':
+                    tem.speedSet = 'low'
+                    self.dp.requestWind(tem.roomID, 1)
                 tem.cost = tem.totalCost
                 self.dp.Insert(roomID, '开机', 'mid', tem.runState, round(tem.totalCost, 4))
-                self.dp.requestWind(tem.roomID, 2)
+
 
         elif event_type == '送风请求':
             if temp != '':
@@ -154,26 +170,22 @@ class Server:
             self.dp.stopWind(tem.roomID)
             time.sleep(0.2)
             self.dp.Insert(roomID, '关机', 'low', 'close', round(tem.totalCost, 4))
+            tem.runState = 'close'
 
         dic = {'当前温度': round(tem.tempNow, 4),
                # '目标温度': tem.tempSet,
                # '风速': tem.speedSet,
-               # '状态': tem.runState,
+               '状态': tem.runState,
                '当前费用': round(tem.totalCost - tem.cost, 4),
                '总费用': round(tem.totalCost, 4)}
-        if roomID == 2:
-            print(event_type)
-            print(dic)
         return dic
 
     def try_test(self,roomID=1, type=1):
         thread = threading.Thread(target=self.try_Test, args=(roomID, type))  # 创建线程
         thread.start()  # 启动线程
-        print('线程建立')
 
     def try_Test(self,roomID, type):  # 运行测试用例，返回房间号对应的账单详单两个dataframe的列表
         if self.dp.flag:
-            print('开始运行')
             msg0 = [
                 [['开机请求'], ['送风请求', '18', ''], '', '', '', ['送风请求', '', 'high'], '', '', '',
                  ['送风请求', '22', ''],
