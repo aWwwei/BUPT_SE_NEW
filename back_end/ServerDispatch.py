@@ -1,19 +1,25 @@
 '''
 @ 文件名：ServerDispatch.py
 @ 文件功能描述：服务器调度管理类，用于接受客户端送风请求并进行调度
-@ 创建日期：2023年11月27日
 @ 创建人：任波
+@ 创建日期：2023年11月27日
+
 @ 修改描述：修正调度逻辑
+@ 修改人：任波
 @ 修改日期：2023年12月2日
+
 @ 修改描述：添加插入调用属性，函数及队列
 @ 修改人：任波
 @ 修改日期：2023年12月7日
+
 @ 修改描述：添加开关和状态判断
 @ 修改人：任波
 @ 修改日期：2023年12月11日
+
 @ 修改描述：增设模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
+
 @ 修改描述：优化调度逻辑
 @ 修改人：任波
 @ 修改日期：2023年12月15日
@@ -66,17 +72,14 @@ class Dispatch:
     # 加入服务队列
     def addToServer(self, roomID, speedValue):
         t=time.time()
-        dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t
-               }
-
+        dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t, 'place':0}
         self.queueS.append(dic)
         return self.queueS
 
     # 加入等待队列
     def addToWait(self, roomID, speedValue):
         t=time.time()
-        dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t
-               }
+        dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t, 'place':0}
         self.queueW.append(dic)
         return self.queueW
 
@@ -89,7 +92,7 @@ class Dispatch:
 
     # 从等待队列移除
     def removeFromWait(self, roomID):
-        time.sleep(0.1)
+        time.sleep(0.3)
         for item in self.queueW:
             if item['roomID'] == roomID:
                 self.queueW.remove(item)
@@ -97,13 +100,16 @@ class Dispatch:
 
     # 从等待队列移入服务队列
     def moveToServer(self, roomID):
+        place=0
         for item in self.queueW:
             if item['roomID'] == roomID:
                 dic = item
                 dic['startT'] = time.time()
+                dic['place'] = place
                 self.queueS.append(dic)
-                self.queueW.remove(item)
+                self.queueW.remove(item
                 break
+            place+=1
 
     def removeToServer(self, roomID):
         for i in range(len(self.queueS)):
@@ -124,7 +130,7 @@ class Dispatch:
                     self.queueW.append(dic)
                 else:
                     dic['startT'] = time.time()
-                    self.queueW.insert(0, dic)
+                    self.queueW.insert(dic['place'], dic)
                 break
 
     def addWaitTime(self, startT):
@@ -347,10 +353,6 @@ class Dispatch:
                                 self.speedB = item['speed']
                                 self.moveToWait(self.queueS[i]['roomID'])
                                 self.moveToServer(item['roomID'])
-                                if item['roomID'] == 2:
-                                    print('uptate:2加入服务 ')
-                                if item['roomID'] == 3:
-                                    print('uptate:3加入服务 ')
                                 break                           
                         if j:
                             self.roomIDA = 0
