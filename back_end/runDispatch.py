@@ -69,12 +69,12 @@ class Server:
             if tem is None:
                 dic.append(None)
             else:
-                dic.append({'当前温度': round(tem.tempNow, 4),
-                        '目标温度': tem.tempSet,
-                        '风速': tem.speedSet,
-                        '状态': tem.runState,
-                        '当前费用': round(tem.totalCost - tem.cost, 4),
-                        '总费用': round(tem.totalCost, 4)})
+                dic.append({'当前温度': round(tem.tempNow, 2),
+                            '目标温度': tem.tempSet,
+                            '风速': tem.speedSet,
+                            '状态': tem.runState,
+                            '当前费用': round(tem.totalCost - tem.cost, 2),
+                            '总费用': round(tem.totalCost, 2)})
         return dic
 
     def schedule(self, roomID, event_type='送风请求', temp='', speed=''): # 空调请求
