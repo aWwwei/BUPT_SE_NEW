@@ -1,20 +1,26 @@
 '''
 @ 文件名：runDispatch.py
 @ 文件功能描述：调度的封装接口
-@ 创建日期：2023年12月7日
 @ 创建人：任波
+@ 创建日期：2023年12月7日
+
 @ 修改描述：添加插入调用
 @ 修改人：任波
 @ 修改日期：2023年12月7日
+
 @ 修改描述：增加接口
 @ 修改人：任波
 @ 修改日期：2023年12月11日
+
 @ 修改描述：整理为类
 @ 修改人：任波
 @ 修改日期：2023年12月13日
+
 @ 修改描述：增设开关与模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
+
+
 @ 修改描述：增设开关与模式控制
 @ 修改人：任波
 @ 修改日期：2023年12月14日
@@ -94,12 +100,12 @@ class Server:
     def askdf(self,roomID,type): # 账单详单运行 非接口
         if type:
             tem = self.temSet[self.temID[roomID - 1]]
-            tem.runState = 'close'
+            tem.runState = 'closed'
             df = front_desk.print_details(self.dp.details_table, roomID)
             self.insert(df, 'details' + str(roomID) + '.xlsx')
         else:
             tem = self.temSet[self.temID[roomID - 1]]
-            tem.runState = 'close'
+            tem.runState = 'closed'
             df = front_desk.print_bill(self.dp.check_table, roomID, round(tem.totalCost, 4))
             self.insert(df, 'bill' + str(roomID) + '.xlsx')
 
@@ -119,7 +125,7 @@ class Server:
         else:
             tem = self.temSet[self.temID[roomID - 1]]
         if event_type == '开机请求':
-            if tem.runState == 'close':
+            if tem.runState == 'closed':
                 if len(self.dp.queueS) < 3:
                     tem.runState = 'running'
                 else:
@@ -166,16 +172,16 @@ class Server:
 
         elif event_type == '关机请求':
 
-            tem.runState = 'close'
+            tem.runState = 'closed'
             self.dp.stopWind(tem.roomID)
             time.sleep(0.2)
-            self.dp.Insert(roomID, '关机', 'low', 'close', round(tem.totalCost, 4))
-            tem.runState = 'close'
+            self.dp.Insert(roomID, '关机', 'low', 'closed', round(tem.totalCost, 4))
+            tem.runState = 'closed'
 
         dic = {'当前温度': round(tem.tempNow, 4),
                # '目标温度': tem.tempSet,
                # '风速': tem.speedSet,
-               '状态': tem.runState,
+               # '状态': tem.runState,
                '当前费用': round(tem.totalCost - tem.cost, 4),
                '总费用': round(tem.totalCost, 4)}
         return dic
@@ -230,7 +236,7 @@ class Server:
                     t0 = time.time()
                     for i in range(5):
                         tem = self.temSet[self.temID[i]]
-                        tem.runState = 'close'
+                        tem.runState = 'closed'
                         df = front_desk.print_bill(self.dp.check_table, i + 1, round(tem.totalCost, 4))
                         self.insert(df, 'bill' + str(i + 1) + '.xlsx')
                         if i + 1 == roomID:
