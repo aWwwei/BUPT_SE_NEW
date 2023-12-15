@@ -17,6 +17,7 @@
 @ 修改日期：2023年12月11日
 '''
 
+
 import time
 import ReadConfig
 import threading
@@ -64,24 +65,6 @@ class TempControl:
     def setTemp(self, temp):
         self.tempSet = temp
         return 1
-    def changeState(self):
-        while True:
-            run = 0
-            wait = 0
-            for item in self.dp.queueS:
-                if item['roomID'] == self.roomID:
-                    run = 1
-            for item in self.dp.queueW:
-                if item['roomID'] == self.roomID:
-                    wait = 1
-            if run:
-                if self.runState != 'running':
-                    self.dp.Insert(self.roomID, '开机', self.speedSet, 'running', round(self.totalCost, 4))
-                self.runState = 'running'
-            elif wait:
-                if self.runState == 'running':
-                    self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
-                self.runState = 'waiting'
         
     # 用信号定时触发该函数，一定频率进行改变
     def changeTemp(self):
@@ -98,7 +81,7 @@ class TempControl:
                     wait = 1
             if run:
                 if self.runState != 'running':
-                    self.dp.Insert(self.roomID, '开机', self.speedSet, 'running', round(self.totalCost, 4))
+                    self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'running', round(self.totalCost, 4))
                 self.runState = 'running'
             elif wait:
                 if self.runState == 'running':
@@ -112,12 +95,12 @@ class TempControl:
                         self.runState = 'sleeping'
                         self.dp.stopWind(self.roomID)
                         time.sleep(0.5)
-                        self.dp.Insert(self.roomID, '关机', self.speedSet, 'waiting', round(self.totalCost, 4))
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
                     elif self.runModel == "warm" and self.tempNow >= self.tempSet:  # 温度相等停止变化
                         self.runState = 'sleeping'
                         self.dp.stopWind(self.roomID)
                         time.sleep(0.5)
-                        self.dp.Insert(self.roomID, '关机', self.speedSet, 'waiting', round(self.totalCost, 4))
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
 
                     elif self.runModel == "cool" and self.tempNow > self.tempSet:  # 制冷模式下
                         if self.speedSet == 'high':
@@ -172,13 +155,15 @@ class TempControl:
                         speedValue = 2
                     elif self.speedSet == 'low':
                         speedValue = 1
-                    if self.runModel == "cool" and (self.tempNow - self.tempSet) >= 1:  # 温度相等停止变化
+                    if self.runModel == "cool" and (self.tempNow - self.tempSet) >= 1:  # 回温1度退出休眠
                         # self.runState = 'running'
                         self.runState = 'waiting'
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
                         self.dp.requestWind(self.roomID, speedValue)
-                    elif self.runModel == "warm" and (self.tempSet - self.tempNow) >= 1:  # 温度相等停止变化
+                    elif self.runModel == "warm" and (self.tempSet - self.tempNow) >= 1: # 回温1度退出休眠
                         # self.runState = 'running'
                         self.runState = 'waiting'
+                        self.dp.Insert(self.roomID, '修改风速', self.speedSet, 'waiting', round(self.totalCost, 4))
                         self.dp.requestWind(self.roomID, speedValue)
                     elif self.tempNow < self.tempDefault:
                         self.tempNow += 0.5 / self.refreshSeq
@@ -190,6 +175,12 @@ class TempControl:
                 #        self.tempNow += 0.5 / self.refreshSeq
                 #    elif self.tempNow > self.tempDefault:
                 #        self.tempNow -= 0.5 / self.refreshSeq
+
+                elif self.runState == 'closed':
+                    if self.tempNow < self.tempDefault:
+                        self.tempNow += 0.5 / self.refreshSeq
+                    elif self.tempNow > self.tempDefault:
+                        self.tempNow -= 0.5 / self.refreshSeq
 
                 elif self.runState == 'closed':
                     if self.tempNow < self.tempDefault:
