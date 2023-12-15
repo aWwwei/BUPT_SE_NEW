@@ -125,7 +125,7 @@ class Dispatch:
             if item['roomID'] == roomID:
                 dic = item
                 self.queueS.remove(item)
-                if time.time()-dic['startT']>3:
+                if time.time()-dic['startT']>5:
                     dic['startT'] = time.time()
                     self.queueW.append(dic)
                 else:
@@ -353,7 +353,6 @@ class Dispatch:
                             self.roomIDB = 0
                             self.speedA = 0
                             self.speedB = 0
-                        break
                     else:
                         self.roomIDA = 0
                         self.roomIDB = 0
