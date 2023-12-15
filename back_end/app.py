@@ -31,6 +31,10 @@
 @ 修改描述： 增加初始化实例server，用于调用后端逻辑
 @ 修改人：  田健豪
 @ 修改日期： 2023年12月14日
+
+@ 修改描述： 修改路由set_wind_speed，接收正确的目标温度值
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月15日
 """
 
 import flask
@@ -92,7 +96,7 @@ def power_off():
 def set_wind_speed():
     room_id = request.form.get('room_id')
     wind_speed = request.form.get('wind_speed')
-    temperture = request.form.get('temperture')
+    temperture = request.form.get('target_temperature')
     event_type = '送风请求'
     dict = server.schedule(int(room_id), event_type, temperture, wind_speed)
     response_entity = make_response(dict, 200)
