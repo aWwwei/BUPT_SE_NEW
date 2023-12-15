@@ -78,8 +78,6 @@ class Dispatch:
         dic = {'roomID': roomID, 'speed': speedValue, 'waitedT':0, 'waitT': self.waitTime, 'startT':t
                }
         self.queueW.append(dic)
-        if roomID == 2:
-            print('addToWait:2')
         return self.queueW
 
     # 从服务队列移除
@@ -95,10 +93,6 @@ class Dispatch:
         for item in self.queueW:
             if item['roomID'] == roomID:
                 self.queueW.remove(item)
-                if roomID==3:
-                    print('removeFromWait:3')
-                if roomID==2:
-                    print('removeFromWait:2')
                 break
 
     # 从等待队列移入服务队列
@@ -109,10 +103,6 @@ class Dispatch:
                 dic['startT'] = time.time()
                 self.queueS.append(dic)
                 self.queueW.remove(item)
-                if roomID==3:
-                    print('moveToServer:3')
-                if roomID==2:
-                    print('moveToServer:2')
                 break
 
     def removeToServer(self, roomID):
@@ -121,8 +111,6 @@ class Dispatch:
                 for item in self.queueW:
                     if item['roomID'] == roomID:
                         self.queueW.remove(item)
-                        if roomID == 3:
-                            print('removeToServer:3')
                         break
 
     # 从服务队列移入等待队列
@@ -137,8 +125,6 @@ class Dispatch:
                 else:
                     dic['startT'] = time.time()
                     self.queueW.insert(0, dic)
-                if roomID==3:
-                    print('moveToWait:3')
                 break
 
     def addWaitTime(self, startT):
