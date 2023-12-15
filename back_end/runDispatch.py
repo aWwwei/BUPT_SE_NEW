@@ -31,6 +31,10 @@
 @ 修改描述：调整开关
 @ 修改人：任波
 @ 修改日期：2023年12月15日
+
+@ 修改描述：修改风速
+@ 修改人：田健豪
+@ 修改日期：2023年12月15日
 """
 
 import front_desk
@@ -158,6 +162,7 @@ class Server:
 
                 if speed =='':
                     tem.speedSet = 'mid'
+                    speed = 'mid'
                     self.dp.requestWind(tem.roomID, 2)
                 elif speed == 'high':
                     tem.speedSet = 'high'

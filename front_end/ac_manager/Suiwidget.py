@@ -7,6 +7,10 @@
 @ 修改描述：增加图标
 @ 修改人：杨欣悦
 @ 修改日期：2023年12月15日
+
+@ 修改描述：rgba报错修改
+@ 修改人：杨欣悦
+@ 修改日期：2023年12月15日
 '''
 # -*- coding: utf-8 -*-
 
@@ -66,7 +70,7 @@ class Ui_Admin(object):
         sizePolicy.setVerticalStretch(2)
         sizePolicy.setHeightForWidth(self.frame_5.sizePolicy().hasHeightForWidth())
         self.frame_5.setSizePolicy(sizePolicy)
-        self.frame_5.setStyleSheet("background-color: rgb(168, 168, 168,100);\n"
+        self.frame_5.setStyleSheet("background-color: rgba(168, 168, 168, 100);\n"
 "border-radius:20px ;\n"
 "")
         self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)

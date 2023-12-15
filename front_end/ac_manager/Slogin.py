@@ -7,6 +7,10 @@
 @ 修改描述：增加图标
 @ 修改人：杨欣悦
 @ 修改日期：2023年12月15日
+
+@ 修改描述：border-width修改
+@ 修改人：杨欣悦
+@ 修改日期：2023年12月15日
 '''
 # -*- coding: utf-8 -*-
 
@@ -46,7 +50,7 @@ class Ui_MainWindow(object):
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.frame = QtWidgets.QFrame(self.frame_6)
-        self.frame.setStyleSheet("background-color: rgb(255, 255, 255，0);")
+        self.frame.setStyleSheet("background-color: rgba(255, 255, 255，0);")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -165,14 +169,14 @@ class Ui_MainWindow(object):
         self.widget_2.setMaximumSize(QtCore.QSize(18, 18))
         self.widget_2.setStyleSheet("image: url(:/登陆界面/房间2.png);\n"
 "background-color: rgba(255, 255, 255, 0);\n"
-"border-with:0;border-style:outset；")
+"border-width:0;border-style:outset；")
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout_6.addWidget(self.widget_2)
         self.lineEdit_username = QtWidgets.QLineEdit(self.frame_7)
         self.lineEdit_username.setStyleSheet("QLineEdit{\n"
 "    background-color: rgba(255, 255, 255, 0);\n"
 "    selection-color: rgb(34, 34, 34);\n"
-"border-with:0;border-style:outset；\n"
+"border-width:0;border-style:outset；\n"
 "}\n"
 "\n"
 "")
@@ -200,14 +204,14 @@ class Ui_MainWindow(object):
         self.widget_3.setMaximumSize(QtCore.QSize(18, 18))
         self.widget_3.setStyleSheet("image: url(:/登陆界面/密码.png);\n"
 "background-color: rgba(255, 255, 255, 0);\n"
-"border-with:0;border-style:outset；")
+"border-width:0;border-style:outset；")
         self.widget_3.setObjectName("widget_3")
         self.horizontalLayout_7.addWidget(self.widget_3)
         self.lineEdit_password = QtWidgets.QLineEdit(self.frame_8)
         self.lineEdit_password.setStyleSheet("QLineEdit{\n"
 "    background-color: rgba(255, 255, 255, 0);\n"
 "    selection-color: rgb(34, 34, 34);\n"
-"border-with:0;border-style:outset；\n"
+"border-width:0;border-style:outset；\n"
 "}")
         self.lineEdit_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.lineEdit_password.setObjectName("lineEdit_password")
