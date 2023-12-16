@@ -31,12 +31,3 @@ class Config:
         beginTemp = cf.items("BEGINTEMP")
         beginTemp = dict(beginTemp)
         return beginTemp
-
-    @staticmethod
-    def getTest():
-        cf = configparser.ConfigParser()
-        cf.read("paramConfig.ini", encoding="utf-8")
-        test = cf.items("TEST")
-        test = dict(test)
-        return test
-
