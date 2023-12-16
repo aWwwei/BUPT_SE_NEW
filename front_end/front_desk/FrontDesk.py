@@ -35,6 +35,9 @@
 '''
 
 import requests
+from PyQt5.QtWidgets import QWidget, QMessageBox
+
+import login
 from PyQt5 import QtCore, QtGui, QtWidgets
 #导入用于显示在界面中的图片
 import photo_rc
@@ -266,12 +269,44 @@ class MyForm(Ui_Form,QtWidgets.QWidget):
         self.tableView.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Interactive)
 
 
+class LoginWindow(QWidget, login.Ui_login_window):
+    def __init__(self, parent=None):
+        super(LoginWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.slot_init()
+
+    def slot_init(self):
+        self.login_button.clicked.connect(self.login)
+
+    def login(self):
+        # 在这里添加您的登录逻辑
+        username_input = self.username_edit.text()
+        password_input = self.password_edit.text()
+
+        if username_input == "":
+            QMessageBox.warning(self, '警告', '用户名不能为空，请输入！', QMessageBox.Yes)
+
+        elif password_input == "":
+            QMessageBox.warning(self, '警告', '密码不能为空，请输入！', QMessageBox.Yes)
+        else:
+            data = requests.post(f"http://127.0.0.1:5000/login", data={
+                "username": username_input,
+                "password_input": password_input
+            })
+            if data.status_code == 200:
+
+                self.new_window = MyForm()
+                self.new_window.show()
+                self.close()
+            else:
+                QMessageBox.critical(self, '错误', '用户名或密码错误！')
+
 
 # 创建应用程序并运行
 if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    window = MyForm()
-    window.show()
+    login_window = LoginWindow()
+    login_window.show()
     sys.exit(app.exec_())
