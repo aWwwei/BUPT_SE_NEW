@@ -20,6 +20,13 @@
 @ 修改人：  田健豪
 @ 修改日期： 2023年12月15日
 
+@ 修改描述： 增加函数set_current_tem，用于设置不同房间的初始温度
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月16日
+
+@ 修改描述： 修改函数power_off，增加关机后恢复为缺省目标温度和风速的功能
+@ 修改人：  田健豪
+@ 修改日期： 2023年12月16日
 """
 
 
@@ -67,9 +74,22 @@ class MyWidget(controller.Ui_Client, QWidget):
         self.setupUi(self)  # 使用loadUi不需要再次加载UI
         self.room_id = room_id
         self.label_RoomName.setText(f"ROOM{self.room_id}")
+        self.set_current_tem(room_id)
         self.state = 'off'
 
         self.slot_init()
+
+    def set_current_tem(self, room_id):
+        if room_id == "1":
+            self.label_current_tem.setText("32")
+        elif room_id == "2":
+            self.label_current_tem.setText("28")
+        elif room_id == "3":
+            self.label_current_tem.setText("30")
+        elif room_id == "4":
+            self.label_current_tem.setText("29")
+        elif room_id == "5":
+            self.label_current_tem.setText("35")
 
     def slot_init(self):
         self.pushButton_switch.clicked.connect(self.pushButton_switch_clicked)
@@ -97,7 +117,7 @@ class MyWidget(controller.Ui_Client, QWidget):
 
     def pushButton_check_clicked(self):
         if self.state == 'on':
-            data = requests.post(f"http://127.0.0.1:5000/set_wind_speed", data={
+            data = requests.post(f"http://10.29.31.78:5000/set_wind_speed", data={
                 "room_id": self.room_id,
                 "wind_speed": self.textBrowser_speed.toPlainText(),
                 "target_temperature": self.textBrowser_target_tem.toPlainText()
@@ -113,12 +133,10 @@ class MyWidget(controller.Ui_Client, QWidget):
             self.state = 'on'
         elif self.state == 'on':
             self.power_off()
-            self.timer.stop()
-            del self.timer
             self.state = 'off'
 
     def power_on(self):
-        data = requests.post(f"http://127.0.0.1:5000/power_on", data={
+        data = requests.post(f"http://10.29.31.78:5000/power_on", data={
             "room_id": self.room_id,
             "wind_speed": self.textBrowser_speed.toPlainText(),
             "target_temperature": self.textBrowser_target_tem.toPlainText()
@@ -129,16 +147,18 @@ class MyWidget(controller.Ui_Client, QWidget):
             self.label_Total_fee.setText(str(data.json()['总费用']))
 
     def power_off(self):
-        data = requests.post(f"http://127.0.0.1:5000/power_off", data={
+        data = requests.post(f"http://10.29.31.78:5000/power_off", data={
             "room_id": self.room_id
         })
         if data.status_code == 200:
             self.label_current_tem.setText(str(data.json()['当前温度']))
             self.label_current_fee.setText(str(data.json()['当前费用']))
             self.label_Total_fee.setText(str(data.json()['总费用']))
+        self.textBrowser_target_tem.setText("25")
+        self.textBrowser_speed.setText("mid")
 
     def update(self):
-        data = requests.post(f"http://127.0.0.1:5000/update_control_panel", data={
+        data = requests.post(f"http://10.29.31.78:5000/update_control_panel", data={
             "room_id": self.room_id
         })
         if data.status_code == 200:

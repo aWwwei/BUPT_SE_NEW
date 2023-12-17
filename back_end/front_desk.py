@@ -30,8 +30,6 @@
 """
 
 
-
-
 from database import database, CheckTable, DetailsTable
 import time
 import pandas as pd
@@ -75,9 +73,11 @@ class DetailsList:
         self.room_state = 'closed'
 
     def check_room_state(self, event_time, room_state):
+        # 从非运行状态到运行状态
         if self.room_state != 'running' and room_state == 'running':
             self.service_start_time = event_time
             return False
+        # 从运行状态到非运行状态
         elif self.room_state == 'running' and room_state != 'running':
             self.service_end_time = event_time
             return True
@@ -144,20 +144,4 @@ if __name__ == '__main__':
     check_table.check_in(1)
     # 打印账单
     print_bill(check_table, 1, 1)
-    # dp = ServerDispatch.Dispatch(database)
-
-    # details_table = create_details_table(database)
-    #
-    # dp.Insert(1, '开机', 'mid', 'waiting', 0)
-    # time.sleep(1)
-    # dp.Insert(1, '修改风速', 'high', 'running', 0)
-    # time.sleep(1)
-    # dp.Insert(1, '修改风速', 'mid', 'running', 1)
-    #
-    # dp.Insert(1, '关机', 'low', 'closed', 1)
-    # time.sleep(5)
-    # t1=time.time()
-    # print_details(dp.details_table, 1)
-    # print(time.time()-t1)
-
     database.close()
